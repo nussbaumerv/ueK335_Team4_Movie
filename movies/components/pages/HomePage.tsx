@@ -1,16 +1,22 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
 
-const HomePage = () => {
+function HomePage() {
     return (
-    <View>
-        <Text>
-            HomePage
-        </Text>
-    </View>
+      <View style={styles.container}>
+        <Text variant="headlineMedium">Home!</Text>
+      </View>
     );
-  };
+  }
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
   
   export default HomePage;

@@ -1,15 +1,21 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
-const MoviesPage = () => {
+function MoviesPage() {
     return (
-    <View>
-        <Text>
-            MoviesPage
-        </Text>
-    </View>
+      <View style={styles.container}>
+        <Text variant="headlineMedium">Movies!</Text>
+      </View>
     );
-  };
+  }
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
   
   export default MoviesPage;
