@@ -28,10 +28,10 @@ function Tabs() {
 function MainStackNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Register" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="LoginForm" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="LoginForm" component={LoginForm} />
                 <Stack.Screen name="Register1Form" component={Register1Form} />
                 <Stack.Screen name="Register2Form" component={Register2Form} />
-                <Stack.Screen name="LoginForm" component={LoginForm} />
                 <Stack.Screen name="Navbar" component={Tabs} />
             </Stack.Navigator>
         </NavigationContainer>
