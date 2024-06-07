@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
-import { LoginAPIRequest } from '../service/Auth';
 import { Link, useNavigation } from '@react-navigation/native';
 
 interface FormValues {
@@ -11,9 +10,9 @@ interface FormValues {
   password: string;
 }
 
-const LoginForm: React.FC = () => {
-  const navigation = useNavigation();
+const Register1Form: React.FC = () => {
   const [loginError, setLoginError] = useState<string | null>(null);
+  const navigation = useNavigation();
 
   const validate = (values: FormValues) => {
     const errors: { email?: string; password?: string } = {};
@@ -36,24 +35,9 @@ const LoginForm: React.FC = () => {
       initialValues={{ email: '', password: '' }}
       validate={validate}
       onSubmit={(values, { setSubmitting }) => {
-        setLoginError(null);
-        LoginAPIRequest()
-          .getAuthToken(values.email, values.password)
-          .then(() => {
-            console.log('Successful');
-            navigation.navigate('Navbar');
-          })
-          .catch((error) => {
-            if (error.response && error.response.status === 400) {
-              setLoginError('Wrong email and or password.');
-            } else {
-              setLoginError('An unexpected error occurred. Please try again.');
-              console.error('An error occurred:', error);
-            }
-          })
-          .finally(() => {
-            setSubmitting(false);
-          });
+        setSubmitting(false);
+        // Navigate to register2 and pass all values
+        navigation.navigate('Register2Form', values);
       }}
     >
       {({
@@ -66,7 +50,7 @@ const LoginForm: React.FC = () => {
         isSubmitting,
       }: FormikProps<FormValues>) => (
         <View style={styles.container}>
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>Register</Text>
           <TextInput
             style={styles.input}
             label="Email"
@@ -103,9 +87,9 @@ const LoginForm: React.FC = () => {
             onPress={handleSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Logging in...' : 'Login'}
+            {isSubmitting ? 'Registering...' : 'Next'}
           </Button>
-          <Text>Don't have an account yet? <Link style={styles.link} to={{screen: 'Register1Form'}}>Register here</Link></Text>
+          <Text>Already have an Account? <Link style={styles.link} to={{screen: 'LoginForm'}}>Login here</Link></Text>
         </View>
       )}
     </Formik>
@@ -140,4 +124,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginForm;
+export default Register1Form;
