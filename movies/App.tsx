@@ -4,7 +4,6 @@ import MainStackNavigator from './navigation/MainNavigator';
 import { StyleSheet } from 'react-native';
 
 
-
 const App = () => {
   return (
   <PaperProvider>
