@@ -17,26 +17,99 @@ import LoginForm from '../components/LoginForm';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-// User has to be logged in, if not directed to login page
-
- function Tabs() {
-    return(
-    <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomePage} />
-        <Tab.Screen name="Movies" component={MoviesPage} />
-        <Tab.Screen name="Profile" component={ProfilePage} />
-    </Tab.Navigator>
+export default function MyComponent() {
+    return (
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        tabBar={({ navigation, state, descriptors, insets }) => (
+          <BottomNavigation.Bar
+            navigationState={state}
+           safeAreaInsets={insets}
+            onTabPress={({ route, preventDefault }) => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
+  
+              if (event.defaultPrevented) {
+                preventDefault();
+              } else {
+               navigation.dispatch({
+                  ...CommonActions.navigate(route.name, route.params),
+                  target: state.key,
+                });
+              }
+            }}
+            renderIcon={({ route, focused, color }) => {
+              const { options } = descriptors[route.key];
+              if (options.tabBarIcon) {
+                return options.tabBarIcon({ focused, color, size: 24 });
+              }
+  
+              return null;
+            }}
+            getLabelText={({ route }) => {
+              const { options } = descriptors[route.key];
+              const label =
+                options.tabBarLabel !== undefined
+                  ? options.tabBarLabel
+                  : options.title !== undefined
+                  ? options.title
+                  : route.title;
+  
+              return label;
+            }}
+          />
+        )}
+      >
+        <Tab.Screen
+          name="Home"
+          component={HomePage}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => {
+              return <Icon name="home-outline" size={size} color={color} />;
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Movies"
+          component={MoviesPage}
+          options={{
+            tabBarLabel: 'Movies',
+            tabBarIcon: ({ color, size }) => {
+              return <Icon name="movie-outline" size={size} color={color} />;
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfilePage}
+          options={{
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({ color, size }) => {
+              return <Icon name="account-cog-outline" size={size} color={color} />;
+            },
+          }}
+        />
+      </Tab.Navigator>
     );
-    } 
-
+  }
+  
     function MainStackNavigator() {
-    return(
-    <NavigationContainer>
-        <Stack.Navigator initialRouteName="HomePage" screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Navbar" component={Tabs} />
-        </Stack.Navigator>
-    </NavigationContainer>
-    )
-    } 
+        return (
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="LoginForm" screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="LoginForm" component={LoginForm} />
+                    <Stack.Screen name="Register1Form" component={Register1Form} />
+                    <Stack.Screen name="Register2Form" component={Register2Form} />
+                    <Stack.Screen name="Navbar" component={Tabs} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        )
+    }
  
     export default MainStackNavigator; 
