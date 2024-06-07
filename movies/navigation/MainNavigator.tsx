@@ -2,16 +2,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import HomePage from './components/pages/HomePage';
-import MoviesPage from './components/pages/MoviesPage';
-import ProfilePage from './components/pages/ProfilePage';
+import HomePage from '../components/pages/HomePage';
+import MoviesPage from '../components/pages/MoviesPage';
+import ProfilePage from '../components/pages/ProfilePage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 // User has to be logged in, if not directed to login page
 
-function Tabs() {
+ function Tabs() {
     return(
     <Tab.Navigator>
         <Tab.Screen name="Home" component={HomePage} />
@@ -19,7 +19,7 @@ function Tabs() {
         <Tab.Screen name="Profile" component={ProfilePage} />
     </Tab.Navigator>
     );
-    }
+    } 
 
     function MainStackNavigator() {
     return(
@@ -29,6 +29,6 @@ function Tabs() {
         </Stack.Navigator>
     </NavigationContainer>
     )
-    }
-
-    export default MainStackNavigator;
+    } 
+ 
+    export default MainStackNavigator; 
