@@ -1,17 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-export default function App() {
+
+const App = () => {
   return (
-      <PaperProvider>
-        <View style={styles.container}>
-          <Text>Hello World!</Text>
-          <StatusBar style="auto" />
-        </View>
-      </PaperProvider>
+  <PaperProvider>
+    <MainStackNavigator />
+  <PaperProvider>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
