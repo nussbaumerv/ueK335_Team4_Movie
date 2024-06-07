@@ -1,14 +1,15 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { PaperProvider } from 'react-native-paper';
+import MainStackNavigator from './navigation/MainNavigator';
+import { StyleSheet } from 'react-native';
+
 
 
 const App = () => {
   return (
   <PaperProvider>
     <MainStackNavigator />
-  <PaperProvider>
+  </PaperProvider>
   );
 };
 
