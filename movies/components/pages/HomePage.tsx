@@ -1,8 +1,13 @@
 import * as React from "react";
-import { Text, Card, Button, Avatar, IconButton } from "react-native-paper";
-import { View, StyleSheet, SafeAreaView } from "react-native";
+import { Text, Card, Button, IconButton } from "react-native-paper";
+import { View, StyleSheet, SafeAreaView, Dimensions } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 export default function HomePage() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.backgroundView} />
@@ -10,7 +15,7 @@ export default function HomePage() {
         icon="logout"
         iconColor="white"
         size={24}
-        onPress={() => console.log('Logout pressed')}
+        onPress={() => navigation.navigate('Login')}
         style={styles.logoutButton}
       />
       <Text variant="headlineMedium" style={styles.text}>
@@ -31,6 +36,7 @@ export default function HomePage() {
               mode="contained"
               style={styles.button}
               labelStyle={{ color: 'black' }}
+              onPress={() => navigation.navigate('Movies')}
             >
               Discover More
             </Button>
@@ -52,14 +58,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D1B20',
   },
   text: {
-    marginTop: 20,
-    marginHorizontal: 30,
+    position: 'absolute',
+    top: height * 0.15,
+    marginHorizontal: width * 0.08,
     color: 'white',
   },
   logoutButton: {
     position: 'absolute',
-    top: 20,
-    right: 20,
+    top: height * 0.02,
+    right: width * 0.05,
     backgroundColor: '#4A4458',
     borderRadius: 10,
     width: 40,
@@ -68,30 +75,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    marginTop: 20,  
-    marginHorizontal: 15,
+    position: 'absolute',
+    top: height * 0.30,
+    left: width * 0.01,
+    marginHorizontal: width * 0.04,
     borderRadius: 10,
     backgroundColor: 'black',
+    width: width * 0.9,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+    marginTop: -5,
   },
   title: {
-    color: 'white',
+    color: '#E6E0E9',
+    fontSize: 15,
+    fontWeight: 900,
   },
   subhead: {
-    color: 'white',
+    color: '#E6E0E9',
+    fontSize: 13,
   },
   button: {
     backgroundColor: '#D0BCFF',
     borderRadius: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
+    marginRight: 10,
   },
   cardCover: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
+    height: height * 0.4,
   },
 });
