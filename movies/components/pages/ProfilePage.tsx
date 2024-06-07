@@ -2,16 +2,14 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-
-const HomePage = () => {
+const ProfilePage = () => {
     return (
     <View>
         <Text>
-            HomePage
+            ProfilePage
         </Text>
     </View>
     );
   };
   
-  export default HomePage;
->>>>>>> develop
+  export default ProfilePage;
