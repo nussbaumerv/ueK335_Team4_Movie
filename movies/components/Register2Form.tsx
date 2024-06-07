@@ -49,7 +49,7 @@ const Register2Form: React.FC = () => {
           .getAuthToken(email, password, values.surname, values.lastname, values.age)
           .then(() => {
             console.log('Successful');
-            navigation.navigate('Navbar');
+            navigation.navigate('TabNavigation');
           })
           .catch((error) => {
             if (error.response && error.response.status === 400) {

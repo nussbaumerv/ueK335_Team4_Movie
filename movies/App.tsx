@@ -8,9 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 const App = () => {
   return (
   <PaperProvider>
-    <NavigationContainer>
       <MainStackNavigator />
-    </NavigationContainer>
   </PaperProvider>
   );
 };

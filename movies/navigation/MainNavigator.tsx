@@ -1,17 +1,23 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, BottomNavigation } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomePage from '../components/pages/HomePage';
 import MoviesPage from '../components/pages/MoviesPage';
 import ProfilePage from '../components/pages/ProfilePage';
+import Register1Form from '../components/Register1Form';
+import Register2Form from '../components/Register2Form';
+import LoginForm from '../components/LoginForm';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function MyComponent() {
+function TabNavigation() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -91,6 +97,19 @@ export default function MyComponent() {
       />
     </Tab.Navigator>
   );
+}
+
+export default function MainStackNavigator() {
+  return (
+      <NavigationContainer>
+          <Stack.Navigator initialRouteName="LoginForm" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="LoginForm" component={LoginForm} />
+              <Stack.Screen name="Register1Form" component={Register1Form} />
+              <Stack.Screen name="Register2Form" component={Register2Form} />
+              <Stack.Screen name="TabNavigation" component={TabNavigation} />
+          </Stack.Navigator>
+      </NavigationContainer>
+  )
 }
 
 

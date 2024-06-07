@@ -41,7 +41,7 @@ const LoginForm: React.FC = () => {
           .getAuthToken(values.email, values.password)
           .then(() => {
             console.log('Successful');
-            navigation.navigate('Navbar');
+            navigation.navigate('TabNavigation');
           })
           .catch((error) => {
             if (error.response && error.response.status === 400) {
