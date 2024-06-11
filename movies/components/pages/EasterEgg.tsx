@@ -86,7 +86,7 @@ const App = () => {
     }, 20);
 
     speedIncreaseInterval.current = setInterval(() => {
-      obstacleSpeed.current += 0.3;
+      obstacleSpeed.current += 0.2;
     }, 2000);
   };
 
