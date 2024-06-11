@@ -107,7 +107,7 @@ export default function MainStackNavigator() {
               <Stack.Screen name="LoginForm" component={LoginForm} />
               <Stack.Screen name="Register1Form" component={Register1Form} />
               <Stack.Screen name="Register2Form" component={Register2Form} />
-              <Stack.Screen name="TabNavigation" component={TabNavigation} />
+              <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false  }}/>
               <Stack.Screen name="EasterEgg" component={EasterEgg} />
           </Stack.Navigator>
       </NavigationContainer>
