@@ -110,6 +110,7 @@ function ProfilePage() {
         size={26}
         onPress={handleDelete}
       />
+       <Link style={styles.licenseInfo} to={{screen: 'EasterEgg'}}>License info</Link>
     </View>
   );
 }
@@ -138,6 +139,9 @@ const styles = StyleSheet.create({
   deleteButton: {
     color: "#DC362E",
 
+  },
+  licenseInfo: {
+    marginTop: 22,
   }
 });
 

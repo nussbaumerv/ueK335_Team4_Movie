@@ -40,7 +40,6 @@ const LoginForm: React.FC = () => {
         LoginAPIRequest()
           .getAuthToken(values.email, values.password)
           .then(() => {
-            console.log('Successful');
             navigation.navigate('TabNavigation');
           })
           .catch((error) => {

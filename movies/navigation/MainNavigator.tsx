@@ -13,6 +13,7 @@ import ProfilePage from '../components/pages/ProfilePage';
 import Register1Form from '../components/Register1Form';
 import Register2Form from '../components/Register2Form';
 import LoginForm from '../components/LoginForm';
+import EasterEgg from '../components/pages/EasterEgg';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -107,6 +108,7 @@ export default function MainStackNavigator() {
               <Stack.Screen name="Register1Form" component={Register1Form} />
               <Stack.Screen name="Register2Form" component={Register2Form} />
               <Stack.Screen name="TabNavigation" component={TabNavigation} />
+              <Stack.Screen name="EasterEgg" component={EasterEgg} />
           </Stack.Navigator>
       </NavigationContainer>
   )
