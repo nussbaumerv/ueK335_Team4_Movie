@@ -9,10 +9,13 @@ export const LoginAPIRequest = (api: AxiosInstance = baseInstance) => ({
       password: password,
     });
     AsyncStorage.setItem("accessToken", response.data.accessToken);
+    AsyncStorage.setItem("userId", String(response.data.user.id));
+
     return response.data;
   },
   logout: async () => {
     AsyncStorage.setItem("accessToken", "");
+    AsyncStorage.setItem("userId", "");
   },
 });
 
@@ -26,10 +29,12 @@ export const RegisterAPIRequest = (api: AxiosInstance = baseInstance) => ({
       age: age
     });
     AsyncStorage.setItem("accessToken", response.data.accessToken);
+    AsyncStorage.setItem("userId", response.data.id);
     return response.data;
   },
   logout: async () => {
     AsyncStorage.setItem("accessToken", "");
+    AsyncStorage.setItem("userId", "");
   },
 });
 

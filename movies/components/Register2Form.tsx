@@ -7,23 +7,22 @@ import { RegisterAPIRequest } from '../service/Auth';
 import { useNavigation, useRoute, Link } from '@react-navigation/native';
 
 interface FormValues {
-  surname: string;
+  firstname: string;
   lastname: string;
   age: number;
 }
 
 const Register2Form: React.FC = () => {
   const route = useRoute();
-  console.log(route.params);
   const { email, password } = route.params as { email: string; password: string };
   const navigation = useNavigation();
   const [registerError, setRegisterError] = useState<string | null>(null);
 
   const validate = (values: FormValues) => {
-    const errors: { surname?: string; lastname?: string; age?: string } = {};
+    const errors: { firstname?: string; lastname?: string; age?: string } = {};
 
-    if (!values.surname) {
-      errors.surname = 'Surname is required';
+    if (!values.firstname) {
+      errors.firstname = 'Firstname is required';
     }
 
     if (!values.lastname) {
@@ -41,14 +40,13 @@ const Register2Form: React.FC = () => {
 
   return (
     <Formik
-      initialValues={{ surname: '', lastname: '', age: 0 }}
+      initialValues={{ firstname: '', lastname: '', age: 0 }}
       validate={validate}
       onSubmit={(values, { setSubmitting }) => {
         setRegisterError(null);
         RegisterAPIRequest()
-          .getAuthToken(email, password, values.surname, values.lastname, values.age)
+          .getAuthToken(email, password, values.firstname, values.lastname, values.age)
           .then(() => {
-            console.log('Successful');
             navigation.navigate('TabNavigation');
           })
           .catch((error) => {
@@ -91,15 +89,15 @@ const Register2Form: React.FC = () => {
           
           <TextInput
             style={styles.input}
-            label="Surname"
+            label="Firstname"
             mode="outlined"
-            onChangeText={handleChange('surname')}
-            onBlur={handleBlur('surname')}
-            value={values.surname}
-            error={touched.surname && !!errors.surname}
+            onChangeText={handleChange('firstname')}
+            onBlur={handleBlur('firstname')}
+            value={values.firstname}
+            error={touched.firstname && !!errors.firstname}
           />
-          {touched.surname && errors.surname && (
-            <Text style={styles.errorText}>{errors.surname}</Text>
+          {touched.firstname && errors.firstname && (
+            <Text style={styles.errorText}>{errors.firstname}</Text>
           )}
 
           <TextInput
