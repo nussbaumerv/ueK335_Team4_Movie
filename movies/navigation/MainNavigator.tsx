@@ -16,7 +16,6 @@ import LoginForm from '../components/LoginForm';
 import EasterEgg from '../components/pages/EasterEgg';
 import LogoutPage from '../components/pages/LogoutPage';
 import MovieAdd from '../components/pages/MovieAdd';
-import LoginForm from '../components/LoginForm';
 import MovieDetail from '../components/MovieDetail';
 
 const Tab = createBottomTabNavigator();
@@ -82,7 +81,7 @@ function TabNavigation() {
       />
       <Tab.Screen
         name="Movies"
-        component={MoviesPage}
+        component={MoviesStackNavigator}
         options={{
           tabBarLabel: 'Movies',
           tabBarIcon: ({ color, size }) => {

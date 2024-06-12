@@ -9,6 +9,7 @@ import MovieCard from '../molecules/MovieCard';
 import { useEffect, useState } from 'react';
 import { MovieAPI } from '../../service/Movie';
 import { MovieType } from '../../types/Movie';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 export default function MoviePage() {
   const navigation = useNavigation();
@@ -238,7 +239,7 @@ export default function MoviePage() {
       <Text style={styles.title}>Movies</Text>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
-          <AddButton onPress={() => navigation.navigate('Home', { name: 'Home' })} iconName="plus" />
+          <AddButton onPress={() => navigation.navigate('MovieAdd', { name: 'MovieAdd' })} iconName="plus" />
         </View>
         <View style={styles.buttonWrapper}>
           <CustomButton onPress={openFilterModal} iconName="filter" />
@@ -248,7 +249,7 @@ export default function MoviePage() {
         </View>
         <Divider style={styles.divider} />
         <View style={styles.buttonWrapper}>
-          <LogoutButton onPress={() => navigation.navigate('Screen4', { name: 'Screen4' })} iconName="logout" />
+          <LogoutButton onPress={() => navigation.navigate('Screen4', { name: 'Screen4' })} iconName="magnifier" />
         </View>
       </View>
       <ScrollView
