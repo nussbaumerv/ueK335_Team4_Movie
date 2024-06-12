@@ -14,8 +14,13 @@ export const LoginAPIRequest = (api: AxiosInstance = baseInstance) => ({
     return response.data;
   },
   logout: async () => {
-    AsyncStorage.setItem("accessToken", "");
-    AsyncStorage.setItem("userId", "");
+    try {
+      await AsyncStorage.removeItem("accessToken");
+      await AsyncStorage.removeItem("userId");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      throw error;
+    }
   },
 });
 
@@ -31,10 +36,6 @@ export const RegisterAPIRequest = (api: AxiosInstance = baseInstance) => ({
     AsyncStorage.setItem("accessToken", response.data.accessToken);
     AsyncStorage.setItem("userId", response.data.id);
     return response.data;
-  },
-  logout: async () => {
-    AsyncStorage.setItem("accessToken", "");
-    AsyncStorage.setItem("userId", "");
   },
 });
 

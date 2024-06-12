@@ -111,6 +111,7 @@ function ProfilePage() {
         onPress={handleDelete}
       />
        <Link style={styles.licenseInfo} to={{screen: 'EasterEgg'}}>License info</Link>
+       <Link style={styles.licenseInfo} to={{screen: 'Logout'}}>Logout</Link>
     </View>
   );
 }
