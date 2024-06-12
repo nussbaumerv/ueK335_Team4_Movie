@@ -3,7 +3,7 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useEffect, useState } from "react";
 import { MovieAPI } from '../service/Movie';
 import { MovieType } from "../types/Movie";
-import { useTheme } from 'react-native-paper'; 
+import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import MovieDetailCard from './molecules/DetailMovieCard';
 import MovieDetailSkeletonLoader from './molecules/MovieDetailSkeletonLoader';
@@ -12,7 +12,7 @@ function deleteMovie(id: number): void {
   MovieAPI().deleteMovieById(id);
 }
 
-export default function MovieDetail({ route } : any) {
+export default function MovieDetail({ route }: any) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [movie, setMovie] = useState<MovieType | null>(null);
@@ -24,7 +24,7 @@ export default function MovieDetail({ route } : any) {
       flexGrow: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: theme.colors.onBackground, 
+      backgroundColor: theme.colors.onBackground,
     },
   });
 
@@ -41,7 +41,7 @@ export default function MovieDetail({ route } : any) {
     };
 
     loadMovie();
-  }, []);
+  }, [route]);
 
   const handleDelete = () => {
     if (movie) {
@@ -75,7 +75,7 @@ export default function MovieDetail({ route } : any) {
   return (
     <>
       {loading ? (
-          <MovieDetailSkeletonLoader/>
+        <MovieDetailSkeletonLoader />
       ) : (
         <ScrollView contentContainerStyle={styles.container}>
           {movie && (

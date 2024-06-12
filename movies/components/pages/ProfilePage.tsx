@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     position: 'absolute',
-    top: height * 0.02,
-    right: width * 0.05,
+    top: 10,
+    right: 10,
     backgroundColor: '#4A4458',
     borderRadius: 10,
     width: 40,
