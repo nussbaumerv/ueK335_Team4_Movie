@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-
+import MoviesStackNavigator from './MoviesStackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +16,8 @@ import LoginForm from '../components/LoginForm';
 import EasterEgg from '../components/pages/EasterEgg';
 import LogoutPage from '../components/pages/LogoutPage';
 import MovieAdd from '../components/pages/MovieAdd';
+import LoginForm from '../components/LoginForm';
+import MovieDetail from '../components/MovieDetail';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
