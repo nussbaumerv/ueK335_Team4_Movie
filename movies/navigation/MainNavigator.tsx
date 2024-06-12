@@ -15,6 +15,7 @@ import Register2Form from '../components/Register2Form';
 import LoginForm from '../components/LoginForm';
 import EasterEgg from '../components/pages/EasterEgg';
 import LogoutPage from '../components/pages/LogoutPage';
+import MovieAdd from '../components/pages/MovieAdd';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -28,7 +29,7 @@ function TabNavigation() {
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
           navigationState={state}
-         safeAreaInsets={insets}
+          safeAreaInsets={insets}
           onTabPress={({ route, preventDefault }) => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -39,7 +40,7 @@ function TabNavigation() {
             if (event.defaultPrevented) {
               preventDefault();
             } else {
-             navigation.dispatch({
+              navigation.dispatch({
                 ...CommonActions.navigate(route.name, route.params),
                 target: state.key,
               });
@@ -59,8 +60,8 @@ function TabNavigation() {
               options.tabBarLabel !== undefined
                 ? options.tabBarLabel
                 : options.title !== undefined
-                ? options.title
-                : route.title;
+                  ? options.title
+                  : route.title;
 
             return label;
           }}
@@ -103,17 +104,18 @@ function TabNavigation() {
 
 export default function MainStackNavigator() {
   return (
-      <NavigationContainer>
-          <Stack.Navigator initialRouteName="LoginForm" screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="LoginForm" component={LoginForm} />
-              <Stack.Screen name="Register1Form" component={Register1Form} />
-              <Stack.Screen name="Register2Form" component={Register2Form} />
-              <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false  }}/>
-              <Stack.Screen name="EasterEgg" component={EasterEgg} />
-              <Stack.Screen name="Logout" component={LogoutPage} options={{ headerShown: false, gestureEnabled: false  }}/>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="LoginForm" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="MovieAdd" component={MovieAdd}></Stack.Screen>
+        <Stack.Screen name="LoginForm" component={LoginForm} />
+        <Stack.Screen name="Register1Form" component={Register1Form} />
+        <Stack.Screen name="Register2Form" component={Register2Form} />
+        <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="EasterEgg" component={EasterEgg} />
+        <Stack.Screen name="Logout" component={LogoutPage} options={{ headerShown: false, gestureEnabled: false }} />
 
-          </Stack.Navigator>
-      </NavigationContainer>
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 

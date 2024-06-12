@@ -17,4 +17,9 @@ export const MovieAPI = (api: AxiosInstance = baseInstance) => ({
     const response = await api.delete("film/" + id);
     return response.data as MovieType;
   },
+
+  addMovie: async (values: any) => {
+    const response = await api.post("film", values);
+    return response.data;
+  },
 });
