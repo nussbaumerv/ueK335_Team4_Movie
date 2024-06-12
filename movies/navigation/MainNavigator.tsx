@@ -114,7 +114,6 @@ export default function MainStackNavigator() {
         <Stack.Screen name="Register2" component={Register2Page} />
         <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="MovieAdd" component={MovieAdd} />
-        <Stack.Screen name="MovieDetail" component={MovieDetail} />
         <Stack.Screen name="EasterEgg" component={EasterEgg} />
         <Stack.Screen name="Logout" component={LogoutPage} options={{ headerShown: false, gestureEnabled: false }} />
 
