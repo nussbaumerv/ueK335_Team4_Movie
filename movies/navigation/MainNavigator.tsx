@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomePage from '../components/pages/HomePage';
 import MoviesPage from '../components/pages/MoviesPage';
 import ProfilePage from '../components/pages/ProfilePage';
+import LoginPage from '../components/LoginForm';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,6 +27,8 @@ const Stack = createNativeStackNavigator();
     <NavigationContainer>
         <Stack.Navigator initialRouteName="HomePage" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Navbar" component={Tabs} />
+            <Stack.Screen name="Movies" component={MoviesPage} />
+            <Stack.Screen name="Login" component={LoginPage} />
         </Stack.Navigator>
     </NavigationContainer>
     )

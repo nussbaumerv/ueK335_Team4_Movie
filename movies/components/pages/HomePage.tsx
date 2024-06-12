@@ -2,11 +2,30 @@ import * as React from "react";
 import { Text, Card, Button, IconButton } from "react-native-paper";
 import { View, StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from "react";
+import { MovieAPI } from "../../service/Movie";
+import { MovieType } from "../../types/Movie";
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomePage() {
   const navigation = useNavigation();
+  const [movie, setMovie] = useState<MovieType | null>(null);
+
+  useEffect(() => {
+    const loadRandomMovie = async () => {
+      try {
+        const movieApi = MovieAPI();
+        const movies = await movieApi.getMovies(); 
+        const randomMovie = movies[Math.floor(Math.random()* movies.length)];
+        setMovie(randomMovie);
+      } catch (error) {
+        console.error('Error fetching movie by ID:', error);
+      }
+    };
+
+    loadRandomMovie();
+  }, []);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -18,18 +37,18 @@ export default function HomePage() {
         onPress={() => navigation.navigate('Login')}
         style={styles.logoutButton}
       />
-      <Text variant="headlineMedium" style={styles.text}>
-        Hi Username, welcome to the home of movies ✨
+      <Text variant="headlineLarge" style={styles.text}>
+        Welcome to the home of movies ✨
       </Text>
       <Card mode="outlined" style={styles.card}>
         <Card.Content>
           <View style={styles.cardHeader}>
             <View>
               <Text variant="titleLarge" style={styles.title}>
-                Movie title
+                {movie ? movie.title : "Loading..."}
               </Text>
               <Text variant="bodyMedium" style={styles.subhead}>
-                Subhead
+                {movie && movie.genres ? movie.genres.join(', ') : "Loading..."}
               </Text>
             </View>
             <Button
@@ -42,7 +61,9 @@ export default function HomePage() {
             </Button>
           </View>
         </Card.Content>
-        <Card.Cover source={{ uri: 'https://picsum.photos/700' }} style={styles.cardCover} />
+        {movie && (        
+          <Card.Cover source={{ uri: movie.thumbnail }} style={styles.cardCover} />
+          )}
       </Card>
     </SafeAreaView>
   );
@@ -111,3 +132,7 @@ const styles = StyleSheet.create({
     height: height * 0.4,
   },
 });
+function setMovie(fetchedMovie: MovieType) {
+  throw new Error("Function not implemented.");
+}
+
