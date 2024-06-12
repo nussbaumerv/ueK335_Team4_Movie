@@ -100,7 +100,7 @@ export default function MoviePage() {
     container: {
 
       flex: 1,
-      backgroundColor: theme.colors.onBackground,
+      backgroundColor: theme.colors.background,
       position: 'relative',
     },
     title: {

@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Alert, Image, View, StyleSheet, Dimensions } from 'react-native';
-import { Text, TextInput, IconButton } from 'react-native-paper';
+import { Text, TextInput, IconButton, useTheme } from 'react-native-paper';
 import { UserAPI } from '../../service/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserType } from "../../types/User";
 import { useNavigation, useRoute, Link } from '@react-navigation/native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
 const { width, height } = Dimensions.get('window');
 
-function ProfilePage() {
+export default function ProfilePage() {
   const navigation = useNavigation();
+  const theme = useTheme();
   const [user, setUser] = useState<UserType | null>(null);
 
 
@@ -39,7 +41,7 @@ function ProfilePage() {
     try {
       await UserAPI().deleteUserById(id);
       await AsyncStorage.removeItem("userId");
-      navigation.navigate('LoginForm');
+      navigation.navigate('Login');
     } catch (error: any) {
         Alert.alert('Error', 'An error occurred while deleting your account.');
     }
@@ -54,7 +56,7 @@ function ProfilePage() {
             setUser(fetchedUser);
         } catch (error: any) {
             if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
-                navigation.navigate('LoginForm');
+                navigation.navigate('Login');
             } else {
               Alert.alert("User can't be loaded", "Please try again later");
               console.error('Error fetching user by ID:', error);
@@ -65,8 +67,60 @@ function ProfilePage() {
     loadUser();
 }, []);
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background
+  },
+  logoutButton: {
+    position: 'absolute',
+    top: height * 0.02,
+    right: width * 0.05,
+    backgroundColor: '#4A4458',
+    borderRadius: 10,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 32,
+    fontFamily: 'Roboto',
+    margin: 10,
+    
+  },
+  input: {
+    width: 320,
+    marginBottom: 12,
+  },
+  avatar: {
+    width: 150,
+    height: 150,
+    margin: 20,
+
+  },
+  deleteButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#DC362E',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 5,
+    borderWidth: 0,
+    shadowColor: 'transparent',
+    elevation: 0,
+},
+  licenseInfo: {
+    marginTop: 22,
+    color: "white",
+  }
+});
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <IconButton
         icon="logout"
         iconColor="white"
@@ -111,57 +165,15 @@ function ProfilePage() {
         disabled={true}
       />
       <IconButton
-        icon="delete"
-        containerColor="#DC362E"
+        icon="delete-outline"
         iconColor='white'
+        style={styles.deleteButton}
         size={26}
         onPress={handleDelete}
       />
        <Link style={styles.licenseInfo} to={{screen: 'EasterEgg'}}>License info</Link>
-       <Link style={styles.licenseInfo} to={{screen: 'Logout'}}>Logout</Link>
-    </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoutButton: {
-    position: 'absolute',
-    top: height * 0.02,
-    right: width * 0.05,
-    backgroundColor: '#4A4458',
-    borderRadius: 10,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Roboto',
-    margin: 10,
-  },
-  input: {
-    width: 320,
-    marginBottom: 12,
-  },
-  avatar: {
-    width: 150,
-    height: 150,
-    margin: 20,
 
-  },
-  deleteButton: {
-    color: "#DC362E",
-
-  },
-  licenseInfo: {
-    marginTop: 22,
-  }
-});
-
-export default ProfilePage;

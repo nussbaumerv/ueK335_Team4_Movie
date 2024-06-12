@@ -179,13 +179,13 @@ const styles = StyleSheet.create({
   },
   score: {
     position: 'absolute',
-    top: 100,
+    top: 20,
     fontSize: 24,
     color: '#fff',
   },
   gameOverContainer: {
     position: 'absolute',
-    top: '42%',
+    top: '40%',
     alignItems: 'center',
   },
   gameOver: {
@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 95,
-    left: 40,
+    top: 10,
+    left: 20,
     color: 'white',
   }
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, useTheme } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
 import { LoginAPIRequest } from '../../service/Auth';
 import { Link, useNavigation } from '@react-navigation/native';
@@ -26,6 +26,7 @@ interface FormValues {
 const MovieAdd: React.FC = () => {
   const navigation = useNavigation();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const theme = useTheme();
 
   const validate = (values: FormValues) => {
     const errors: Partial<FormValues> = {};
@@ -82,6 +83,58 @@ const MovieAdd: React.FC = () => {
 
     return errors;
   };
+
+  const styles = StyleSheet.create({
+    keyboardAvoidingContainer: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    scrollContainer: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    container: {
+      width: '100%',
+      paddingHorizontal: 20,
+    },
+    title: {
+      fontSize: 32,
+      fontFamily: 'Roboto',
+      margin: 30,
+      textAlign: 'center',
+      color: 'white',
+    },
+    infoText: {
+      textAlign: 'center',
+      margin: 10,
+      fontSize: 18,
+      color: 'white',
+    },
+    input: {
+      width: '100%',
+      marginBottom: 12,
+    },
+    button: {
+      width: '100%',
+      marginVertical: 20,
+    },
+    errorText: {
+      color: 'red',
+      marginBottom: 12,
+    },
+    link: {
+      color: '#D0BCFF',
+      textAlign: 'center',
+    },
+    backButton: {
+      position: 'absolute',
+      top: 24,
+      left: 20,
+      color: 'white',
+    },
+  });
+  
 
   return (
     <Formik
@@ -290,53 +343,5 @@ const MovieAdd: React.FC = () => {
     </Formik>
   );
 };
-
-const styles = StyleSheet.create({
-  keyboardAvoidingContainer: {
-    flex: 1,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    width: '100%',
-    paddingHorizontal: 20,
-    paddingVertical: 40,
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Roboto',
-    margin: 30,
-    textAlign: 'center',
-  },
-  infoText: {
-    textAlign: 'center',
-    margin: 10,
-    fontSize: 18,
-  },
-  input: {
-    width: '100%',
-    marginBottom: 12,
-  },
-  button: {
-    width: '100%',
-    marginVertical: 20,
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 12,
-  },
-  link: {
-    color: '#D0BCFF',
-    textAlign: 'center',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-  },
-});
 
 export default MovieAdd;

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, useTheme } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
-import { RegisterAPIRequest } from '../service/Auth';
+import { RegisterAPIRequest } from '../../service/Auth';
 import { useNavigation, useRoute, Link } from '@react-navigation/native';
 
 interface FormValues {
@@ -12,10 +12,11 @@ interface FormValues {
   age: number;
 }
 
-const Register2Form: React.FC = () => {
+const Register2Page: React.FC = () => {
   const route = useRoute();
   const { email, password } = route.params as { email: string; password: string };
   const navigation = useNavigation();
+  const theme = useTheme();
   const [registerError, setRegisterError] = useState<string | null>(null);
 
   const validate = (values: FormValues) => {
@@ -37,6 +38,39 @@ const Register2Form: React.FC = () => {
 
     return errors;
   };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+    },
+    title: {
+      fontSize: 32,
+      fontFamily: 'Roboto',
+      margin: 20,
+      color: 'white',
+    },
+    input: {
+      width: 320,
+      marginBottom: 12,
+    },
+    button: {
+      width: 148,
+      margin: 20,
+    },
+    errorText: {
+      color: 'red',
+      marginBottom: 12,
+    },
+    link: {
+      color: '#D0BCFF',
+    },
+    normalText: {
+      color: 'white',
+    }
+  });
 
   return (
     <Formik
@@ -124,39 +158,11 @@ const Register2Form: React.FC = () => {
           >
             {isSubmitting ? 'Registering...' : 'Register'}
           </Button>
-          <Text>Already have an Account? <Link style={styles.link} to={{screen: 'LoginForm'}}>Login here</Link></Text>
+          <Text style={styles.normalText}>Already have an Account? <Link style={styles.link} to={{screen: 'Login'}}>Login here</Link></Text>
         </View>
       )}
     </Formik>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Roboto',
-    margin: 20,
-  },
-  input: {
-    width: 320,
-    marginBottom: 12,
-  },
-  button: {
-    width: 148,
-    margin: 20,
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 12,
-  },
-  link: {
-    color: '#D0BCFF',
-  }
-});
-
-export default Register2Form;
+export default Register2Page;

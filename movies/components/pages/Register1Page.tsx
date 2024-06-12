@@ -1,35 +1,19 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, useTheme } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
-import { LoginAPIRequest } from '../service/Auth';
 import { Link, useNavigation } from '@react-navigation/native';
-import { UserAPI } from '../service/User';
 
 interface FormValues {
   email: string;
   password: string;
 }
 
-const LoginForm: React.FC = () => {
-  const navigation = useNavigation();
+const Register1Page: React.FC = () => {
   const [loginError, setLoginError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      try {
-        await UserAPI().isLoggedIn();
-        navigation.navigate('TabNavigation');
-      } catch (error: any) {
-        if (error.response && error.response.status !== 401) {
-          console.log("User isn't lodged in yet");
-        }
-      }
-    };
-
-    checkLoggedIn();
-  }, [navigation]);
+  const navigation = useNavigation();
+  const theme = useTheme();
 
   const validate = (values: FormValues) => {
     const errors: { email?: string; password?: string } = {};
@@ -47,28 +31,47 @@ const LoginForm: React.FC = () => {
     return errors;
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+    },
+    title: {
+      fontSize: 32,
+      fontFamily: 'Roboto',
+      margin: 20,
+      color: 'white',
+    },
+    input: {
+      width: 320,
+      marginBottom: 12,
+    },
+    button: {
+      width: 148,
+      margin: 20,
+    },
+    errorText: {
+      color: 'red',
+      marginBottom: 12,
+    },
+    link: {
+      color: '#D0BCFF',
+    },
+    normalText: {
+      color: 'white',
+    }
+  });
+
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
       validate={validate}
       onSubmit={(values, { setSubmitting }) => {
-        setLoginError(null);
-        LoginAPIRequest()
-          .getAuthToken(values.email, values.password)
-          .then(() => {
-            navigation.navigate('TabNavigation');
-          })
-          .catch((error) => {
-            if (error.response && error.response.status === 400) {
-              setLoginError('Wrong email and or password.');
-            } else {
-              setLoginError('An unexpected error occurred. Please try again.');
-              console.error('An error occurred:', error);
-            }
-          })
-          .finally(() => {
-            setSubmitting(false);
-          });
+        setSubmitting(false);
+        // Navigate to register2 and pass all values
+        navigation.navigate('Register2', values);
       }}
     >
       {({
@@ -81,7 +84,7 @@ const LoginForm: React.FC = () => {
         isSubmitting,
       }: FormikProps<FormValues>) => (
         <View style={styles.container}>
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>Register</Text>
           <TextInput
             style={styles.input}
             label="Email"
@@ -118,41 +121,14 @@ const LoginForm: React.FC = () => {
             onPress={handleSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Logging in...' : 'Login'}
+            {isSubmitting ? 'Registering...' : 'Next'}
           </Button>
-          <Text>Don't have an account yet? <Link style={styles.link} to={{screen: 'Register1Form'}}>Register here</Link></Text>
+          <Text style={styles.normalText}>Already have an Account? <Link style={styles.link} to={{screen: 'Login'}}>Login here</Link></Text>
         </View>
       )}
     </Formik>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Roboto',
-    margin: 20,
-  },
-  input: {
-    width: 320,
-    marginBottom: 12,
-  },
-  button: {
-    width: 148,
-    margin: 20,
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 12,
-  },
-  link: {
-    color: '#D0BCFF',
-  }
-});
 
-export default LoginForm;
+export default Register1Page;

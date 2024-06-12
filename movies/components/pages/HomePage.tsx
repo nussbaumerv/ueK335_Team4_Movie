@@ -21,7 +21,7 @@ export default function HomePage() {
         setMovie(randomMovie);
       } catch (error: any) {
         if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
-            navigation.navigate('LoginForm');
+            navigation.navigate('Login');
         } else {
           Alert.alert("Movies can't be loaded", "Please try again later");
           console.error('Error fetching movies:', error);

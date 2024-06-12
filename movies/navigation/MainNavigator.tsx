@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import MoviesStackNavigator from './MoviesStackNavigator';
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,13 +10,14 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomePage from '../components/pages/HomePage';
 import MoviesPage from '../components/pages/MoviesPage';
 import ProfilePage from '../components/pages/ProfilePage';
-import Register1Form from '../components/Register1Form';
-import Register2Form from '../components/Register2Form';
-import LoginForm from '../components/LoginForm';
+import Register1Page from '../components/pages/Register1Page';
+import Register2Page from '../components/pages/Register2Page';
+import LoginPage from '../components/pages/LoginPage';
 import EasterEgg from '../components/pages/EasterEgg';
 import LogoutPage from '../components/pages/LogoutPage';
 import MovieAdd from '../components/pages/MovieAdd';
 import MovieDetail from '../components/MovieDetail';
+import { DarkScheme } from '../components/theme/DarkScheme';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -106,11 +107,11 @@ function TabNavigation() {
 export default function MainStackNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginForm" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="MovieAdd" component={MovieAdd}></Stack.Screen>
-        <Stack.Screen name="LoginForm" component={LoginForm} />
-        <Stack.Screen name="Register1Form" component={Register1Form} />
-        <Stack.Screen name="Register2Form" component={Register2Form} />
+        <Stack.Screen name="Login" component={LoginPage} />
+        <Stack.Screen name="Register1" component={Register1Page} />
+        <Stack.Screen name="Register2" component={Register2Page} />
         <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="EasterEgg" component={EasterEgg} />
         <Stack.Screen name="Logout" component={LogoutPage} options={{ headerShown: false, gestureEnabled: false }} />

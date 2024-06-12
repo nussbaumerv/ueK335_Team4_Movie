@@ -1,6 +1,6 @@
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useEffect} from "react";
-import { Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 import { LoginAPIRequest } from '../../service/Auth';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 function LogoutPage() {
   const navigation = useNavigation();
+  const theme = useTheme();
 
   const logoutUser = async () => {
     try {
@@ -21,35 +22,38 @@ function LogoutPage() {
     logoutUser();
   }, []);
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+    },
+    title: {
+      fontSize: 40,
+      fontFamily: 'Roboto',
+      margin: 10,
+      textAlign: 'center',
+      color: 'white',
+    },
+    subTitle: {
+      fontSize: 18,
+      fontFamily: 'Roboto',
+      marginBottom: 20,
+      textAlign: 'center',
+      color: 'white',
+    },
+  });
+
   return (
     <View style={styles.container}>
         <Text style={styles.title}>See you soon!</Text>
         <Text style={styles.subTitle}>You've been successfully logged out.</Text>
-        <Button onPress={() => navigation.navigate('LoginForm')} mode="contained">
+        <Button onPress={() => navigation.navigate('Login')} mode="contained">
           Login Again
         </Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 40,
-    fontFamily: 'Roboto',
-    margin: 10,
-    textAlign: 'center',
-  },
-  subTitle: {
-    fontSize: 18,
-    fontFamily: 'Roboto',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-});
 
 export default LogoutPage;

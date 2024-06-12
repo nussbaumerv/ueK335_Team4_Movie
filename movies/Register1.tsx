@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
-import Register1Form from './components/Register1Form';
+import Register1Form from './components/pages/Register1Page';
 
 export default function Register1() {
   return (
