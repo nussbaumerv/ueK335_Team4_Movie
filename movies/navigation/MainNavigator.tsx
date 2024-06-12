@@ -4,7 +4,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import HomePage from '../components/pages/HomePage';
 import MoviesPage from '../components/pages/MoviesPage';
+
 import ProfilePage from '../components/pages/ProfilePage';
+import LoginForm from '../components/LoginForm';
+import MovieDetail from '../components/MovieDetail';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -13,10 +16,14 @@ const Stack = createNativeStackNavigator();
 
  function Tabs() {
     return(
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{
+        headerShown: false
+    }}>
         <Tab.Screen name="Home" component={HomePage} />
         <Tab.Screen name="Movies" component={MoviesPage} />
         <Tab.Screen name="Profile" component={ProfilePage} />
+        <Tab.Screen name="Login" component={LoginForm} />
+        <Tab.Screen name="MovieDetail" component={MovieDetail} />
     </Tab.Navigator>
     );
     } 

@@ -1,21 +1,28 @@
+import * as React from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from "react";
 import { MovieAPI } from '../service/Movie';
 import { MovieType } from "../types/Movie";
 import { Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import MovieDetailCard from './molecules/DetailMovieCard';
 
 function deleteMovie(id: number): void {
   MovieAPI().deleteMovieById(id);
 }
 
-export default function MovieDetail() {
+export default function MovieDetail({ route } : any) {
+  const navigation = useNavigation();
+
   const [movie, setMovie] = useState<MovieType | null>(null);
+
+  const { id } = route.params;
 
   useEffect(() => {
     const loadMovie = async () => {
       try {
         const movieApi = MovieAPI();
-        const fetchedMovie = await movieApi.getMovieById(1);
+        const fetchedMovie = await movieApi.getMovieById(id);
         setMovie(fetchedMovie);
       } catch (error) {
         console.error('Error fetching movie by ID:', error);
@@ -37,7 +44,10 @@ export default function MovieDetail() {
           },
           {
             text: 'Delete',
-            onPress: () => MovieAPI().deleteMovieById(movie.id),
+            onPress: () => {
+              deleteMovie(movie.id);
+              navigation.navigate('Movies', { name: 'Movies' });
+            },
             style: 'destructive',
           },
         ]
@@ -47,21 +57,13 @@ export default function MovieDetail() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{movie?.title}</Text>
-      <Image
-        source={{ uri: movie?.thumbnail }}
-        style={{ width: movie?.thumbnail_width, height: movie?.thumbnail_height }}
-      />
-      <Text style={styles.subtitle}>Extract</Text>
-      <Text style={styles.normalText}>{movie?.extract}</Text>
-      <Text style={styles.subtitle}>Cast</Text>
-      <Text style={styles.normalText}>{movie?.cast}</Text>
-      <Button icon="delete" mode="contained" onPress={handleDelete}>
-        Delete  
-      </Button>
-      <Button icon="pencil" mode="contained" onPress={() => console.log('Pressed')}>
-        Edit  
-      </Button>
+      {movie && (
+        <MovieDetailCard
+          movie={movie}
+          onDelete={handleDelete}
+          onBack={() => navigation.navigate('Movies', { name: 'Movies' })}
+        />
+      )}
     </ScrollView>
   );
 }
@@ -71,20 +73,4 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
   },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Roboto',
-    margin: 20,
-  },
-
-  subtitle: {
-    fontSize: 20,
-    margin: 10,
-  },
-
-  normalText: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginHorizontal: 20,
-  }
 });

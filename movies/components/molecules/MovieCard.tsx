@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Card, IconButton } from 'react-native-paper';
+import { MovieType } from '../../types/Movie';
 
 const MAX_SUBTITLE_LENGTH_PERCENTAGE = 0.15;
 const screenWidth = Dimensions.get('window').width;
 
-const MovieCard = () => {
-  const subtitle = 'This is a long subtitle that needs to be truncated bsasfdasfasdfsdafsdaffsefsadfasfes';
+const MovieCard = ({ movie }: { movie: MovieType }) => {
+  const subtitle = movie.extract;
   const maxSubtitleLength = Math.floor(MAX_SUBTITLE_LENGTH_PERCENTAGE * screenWidth);
   const truncatedSubtitle =
     subtitle.length > maxSubtitleLength ? subtitle.substring(0, maxSubtitleLength) + '...' : subtitle;
@@ -14,7 +15,7 @@ const MovieCard = () => {
   const [rating, setRating] = React.useState(0);
   const [isFavorite, setIsFavorite] = React.useState(false);
 
-  const handleRating = (value : any) => {
+  const handleRating = (value: number) => {
     setRating(value);
   };
 
@@ -22,16 +23,16 @@ const MovieCard = () => {
     setIsFavorite(!isFavorite);
   };
 
-  const renderStarIcon = (index : any) => {
+  const renderStarIcon = (index: number) => {
     return index <= rating ? 'star' : 'star-outline';
   };
 
   return (
     <Card style={styles.card}>
       <View style={styles.cardContent}>
-        <Image source={{ uri: 'https://picsum.photos/700' }} style={styles.image} />
+        <Image source={{ uri: movie.thumbnail }} style={styles.image} />
         <View style={styles.textContainer}>
-          <Text style={styles.title}>Card Title</Text>
+          <Text style={styles.title}>{movie.title}</Text>
           <Text style={styles.subtitle}>{truncatedSubtitle}</Text>
           <View style={styles.ratingContainer}>
             {[1, 2, 3, 4, 5].map((index) => (
