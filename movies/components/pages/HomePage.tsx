@@ -20,12 +20,16 @@ export default function HomePage() {
         const randomMovie = movies[Math.floor(Math.random()* movies.length)];
         setMovie(randomMovie);
       } catch (error) {
-        console.error('Error fetching movie by ID:', error);
+        console.error('Error fetching movies:', error);
       }
     };
 
     loadRandomMovie();
   }, []);
+
+  const handleLogout = () => {
+    navigation.navigate('Login');
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -34,7 +38,7 @@ export default function HomePage() {
         icon="logout"
         iconColor="white"
         size={24}
-        onPress={() => navigation.navigate('Login')}
+        onPress={handleLogout}
         style={styles.logoutButton}
       />
       <Text variant="headlineLarge" style={styles.text}>
@@ -43,27 +47,28 @@ export default function HomePage() {
       <Card mode="outlined" style={styles.card}>
         <Card.Content>
           <View style={styles.cardHeader}>
-            <View>
+            <View style={styles.cardText}>
               <Text variant="titleLarge" style={styles.title}>
                 {movie ? movie.title : "Loading..."}
               </Text>
               <Text variant="bodyMedium" style={styles.subhead}>
-                {movie && movie.genres ? movie.genres.join(', ') : "Loading..."}
+                {movie ? movie.year : "Loading..."}
               </Text>
             </View>
             <Button
               mode="contained"
-              style={styles.button}
+              style={styles.button} 
               labelStyle={{ color: 'black' }}
               onPress={() => navigation.navigate('Movies')}
+              // onPress={() => navigation.navigate('MovieDetail', { movieID: movie?.id })}
             >
-              Discover More
+              View Movie
             </Button>
           </View>
         </Card.Content>
         {movie && (        
           <Card.Cover source={{ uri: movie.thumbnail }} style={styles.cardCover} />
-          )}
+        )}
       </Card>
     </SafeAreaView>
   );
@@ -111,10 +116,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: -5,
   },
+  cardText: {
+    flex: 1,
+    marginRight: 10,
+  },
   title: {
     color: '#E6E0E9',
     fontSize: 15,
-    fontWeight: 900,
+    fontWeight: '900',
   },
   subhead: {
     color: '#E6E0E9',
@@ -123,16 +132,12 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#D0BCFF',
     borderRadius: 20,
-    paddingHorizontal: 5,
-    marginRight: 10,
+    paddingHorizontal: 10,
   },
   cardCover: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     height: height * 0.4,
+    width: '100%',
   },
 });
-function setMovie(fetchedMovie: MovieType) {
-  throw new Error("Function not implemented.");
-}
-
