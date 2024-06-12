@@ -13,4 +13,9 @@ export const UserAPI = (api: AxiosInstance = baseInstance) => ({
     const response = await api.delete("users/" + id);
     return response.data as UserType;
   },
+
+  isLoggedIn: async () => {
+    const response = await api.get("film");
+    return response.headers;
+  },
 });

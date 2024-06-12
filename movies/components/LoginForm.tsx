@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
 import { LoginAPIRequest } from '../service/Auth';
 import { Link, useNavigation } from '@react-navigation/native';
+import { UserAPI } from '../service/User';
 
 interface FormValues {
   email: string;
@@ -14,6 +15,21 @@ interface FormValues {
 const LoginForm: React.FC = () => {
   const navigation = useNavigation();
   const [loginError, setLoginError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      try {
+        await UserAPI().isLoggedIn();
+        navigation.navigate('TabNavigation');
+      } catch (error: any) {
+        if (error.response && error.response.status !== 401) {
+          console.log("User isn't lodged in yet");
+        }
+      }
+    };
+
+    checkLoggedIn();
+  }, [navigation]);
 
   const validate = (values: FormValues) => {
     const errors: { email?: string; password?: string } = {};

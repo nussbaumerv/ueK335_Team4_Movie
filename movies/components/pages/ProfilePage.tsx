@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Alert, Image, View, StyleSheet } from 'react-native';
+import { Alert, Image, View, StyleSheet, Dimensions } from 'react-native';
 import { Text, TextInput, IconButton } from 'react-native-paper';
 import { UserAPI } from '../../service/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,7 +8,7 @@ import { UserType } from "../../types/User";
 import { useNavigation, useRoute, Link } from '@react-navigation/native';
 
 
-
+const { width, height } = Dimensions.get('window');
 
 function ProfilePage() {
   const navigation = useNavigation();
@@ -53,10 +53,10 @@ function ProfilePage() {
             const fetchedUser = await userApi.getUserById(userId);
             setUser(fetchedUser);
         } catch (error: any) {
-            if (error.response && error.response.status === 403) {
+            if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
                 navigation.navigate('LoginForm');
             } else {
-              Alert.alert("Error", "User can't be loaded");
+              Alert.alert("User can't be loaded", "Please try again later");
               console.error('Error fetching user by ID:', error);
             }
         }
@@ -67,6 +67,13 @@ function ProfilePage() {
 
   return (
     <View style={styles.container}>
+      <IconButton
+        icon="logout"
+        iconColor="white"
+        size={24}
+        onPress={() => navigation.navigate('Logout')}
+        style={styles.logoutButton}
+      />
       <Text style={styles.title}>Profile</Text>
       <Image
         source={{
@@ -119,6 +126,17 @@ function ProfilePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoutButton: {
+    position: 'absolute',
+    top: height * 0.02,
+    right: width * 0.05,
+    backgroundColor: '#4A4458',
+    borderRadius: 10,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },

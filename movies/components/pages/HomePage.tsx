@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, Card, Button, IconButton } from "react-native-paper";
-import { View, StyleSheet, SafeAreaView, Dimensions } from "react-native";
+import { View, StyleSheet, SafeAreaView, Dimensions, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import { MovieAPI } from "../../service/Movie";
@@ -19,28 +19,22 @@ export default function HomePage() {
         const movies = await movieApi.getMovies(); 
         const randomMovie = movies[Math.floor(Math.random()* movies.length)];
         setMovie(randomMovie);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
+      } catch (error: any) {
+        if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
+            navigation.navigate('LoginForm');
+        } else {
+          Alert.alert("Movies can't be loaded", "Please try again later");
+          console.error('Error fetching movies:', error);
+        }
+    }
     };
 
     loadRandomMovie();
   }, []);
 
-  const handleLogout = () => {
-    navigation.navigate('Login');
-  };
-
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.backgroundView} />
-      <IconButton
-        icon="logout"
-        iconColor="white"
-        size={24}
-        onPress={handleLogout}
-        style={styles.logoutButton}
-      />
       <Text variant="headlineLarge" style={styles.text}>
         Welcome to the home of movies ✨
       </Text>
@@ -88,17 +82,6 @@ const styles = StyleSheet.create({
     top: height * 0.15,
     marginHorizontal: width * 0.08,
     color: 'white',
-  },
-  logoutButton: {
-    position: 'absolute',
-    top: height * 0.02,
-    right: width * 0.05,
-    backgroundColor: '#4A4458',
-    borderRadius: 10,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   card: {
     position: 'absolute',
