@@ -5,37 +5,71 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import { MovieAPI } from "../../service/Movie";
 import { MovieType } from "../../types/Movie";
+import { UserAPI } from "../../service/User";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomePage() {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<MovieType | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
+  let feedbackGiven = false;
+
+  useEffect(() => {
+    const loadUser = async () => {
+        try {
+            const userApi = UserAPI();
+            const userId = Number(await AsyncStorage.getItem("userId"));
+            const fetchedUser = await userApi.getUserById(userId);
+            setUser(fetchedUser);
+        } catch (error: any) {
+            if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
+                navigation.navigate('Login');
+            } else {
+              Alert.alert("User can't be loaded", "Please try again later");
+              console.error('Error fetching user by ID:', error);
+            }
+        }
+    };
+
+    loadUser();
+}, []);
 
   useEffect(() => {
     const loadRandomMovie = async () => {
       try {
         const movieApi = MovieAPI();
-        const movies = await movieApi.getMovies(); 
-        const randomMovie = movies[Math.floor(Math.random()* movies.length)];
+        const movies = await movieApi.getMovies();
+        const randomMovie = movies[Math.floor(Math.random() * movies.length)];
         setMovie(randomMovie);
+        feedbackGiven = false;
       } catch (error: any) {
-        if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
+        if (feedbackGiven === false) {
+          if (error.response && error.response.status === 403 || error.response && error.response.status === 401) {
             navigation.navigate('Login');
-        } else {
-          Alert.alert("Movies can't be loaded", "Please try again later");
-          console.error('Error fetching movies:', error);
+          } else {
+            Alert.alert("Movies can't be loaded", "Please try again later");
+            console.error('Error fetching movies:', error);
+          }
+          feedbackGiven = true;
         }
-    }
+      }
     };
 
     loadRandomMovie();
+
+    const intervalId = setInterval(loadRandomMovie, 5000);
+
+    return () => clearInterval(intervalId);
+
   }, []);
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.backgroundView} />
       <Text variant="headlineLarge" style={styles.text}>
+        Hi, {user?.firstname} {"\n"}
         Welcome to the home of movies ✨
       </Text>
       <Card mode="outlined" style={styles.card}>
@@ -51,16 +85,15 @@ export default function HomePage() {
             </View>
             <Button
               mode="contained"
-              style={styles.button} 
+              style={styles.button}
               labelStyle={{ color: 'black' }}
-              onPress={() => navigation.navigate('Movies')}
-              // onPress={() => navigation.navigate('MovieDetail', { movieID: movie?.id })}
+              onPress={() => navigation.navigate('MovieDetail', { id: movie?.id })}
             >
               View Movie
             </Button>
           </View>
         </Card.Content>
-        {movie && (        
+        {movie && (
           <Card.Cover source={{ uri: movie.thumbnail }} style={styles.cardCover} />
         )}
       </Card>
@@ -79,7 +112,7 @@ const styles = StyleSheet.create({
   },
   text: {
     position: 'absolute',
-    top: height * 0.15,
+    top: height * 0.10,
     marginHorizontal: width * 0.08,
     color: 'white',
   },
