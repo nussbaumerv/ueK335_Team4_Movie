@@ -1,29 +1,34 @@
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { View, Dimensions, StyleSheet, ScrollView } from 'react-native';
+import { View, Dimensions, StyleSheet, ScrollView, LogBox } from 'react-native';
 import { Card, IconButton, Text, useTheme } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons'; // Import MaterialIcons from Expo vector icons
 
-const MovieDetailCard = ({ movie, onDelete, onEdit, onBack }) => {
+const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
     const theme = useTheme();
+    const navigation = useNavigation();
+
+    LogBox.ignoreLogs(["When setting overflow to hidden on Surface the shadow will not be displayed correctly"]);
+
 
     const styles = StyleSheet.create({
         container: {
             flex: 1,
             position: 'absolute',
-            backgroundColor: '',
+            backgroundColor: theme.colors.onBackground,
             justifyContent: 'center',
             alignItems: 'center',
-            width: '100%', // Ensure the container covers the entire screen width
-            height: '100%', // Ensure the container covers the entire screen height
+            width: '100%',
+            height: '100%', 
         },
         card: {
             marginTop: Dimensions.get('window').height * 0.05,
             width: Dimensions.get('window').width * 0.8,
             backgroundColor: '#141218', // Card background color
             borderRadius: 12,
-            overflow: 'hidden',
+            overflow: 'hidden', // Fix for the warning
         },
         contentContainer: {
-            overflow: 'hidden', 
             borderRadius: 12,
         },
         header: {
@@ -46,6 +51,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit, onBack }) => {
             elevation: 0,
         },
         title: {
+            flex: 1,
             paddingTop: 30,
             fontSize: 32,
             fontFamily: 'Roboto',
@@ -110,6 +116,8 @@ const MovieDetailCard = ({ movie, onDelete, onEdit, onBack }) => {
         },
     });
 
+    const titleMargin = movie.title.length > 5 ? 70 : 100;
+
     return (
         <View style={styles.container}>
             <Card style={styles.card}>
@@ -118,16 +126,17 @@ const MovieDetailCard = ({ movie, onDelete, onEdit, onBack }) => {
                         <IconButton
                             icon="arrow-left"
                             mode="contained"
-                            onPress={onBack}
+                            onPress={() => navigation.goBack()}
                             style={styles.backButton}
                             iconColor="white"
                         />
-                        <Text style={styles.title}>{movie.title}</Text>
+                        <Text style={[styles.title, { marginLeft: titleMargin }]}>{movie.title}</Text>
                     </View>
                     <View style={styles.imageContainer}>
                         <Card.Cover source={{ uri: movie.thumbnail }} style={styles.image} />
                     </View>
-                    <ScrollView style={styles.scrollViewContent}>
+                    <ScrollView style={styles.scrollViewContent}
+                    indicatorStyle="white" >
                         <Card.Content>
                             <Text style={styles.subtitle}>Extract</Text>
                             <Text style={styles.normalText}>{formatExtract(movie.extract)}</Text>
@@ -144,8 +153,8 @@ const MovieDetailCard = ({ movie, onDelete, onEdit, onBack }) => {
                         </Card.Content>
                     </ScrollView>
                     <Card.Actions style={styles.actions}>
-                        <IconButton icon="delete" size={24} onPress={onDelete} style={styles.deleteButton} iconColor="white" />
-                        <IconButton icon="pen" size={24} onPress={onEdit} style={styles.editButton} iconColor="white" />
+                        <IconButton icon={() => <MaterialIcons name="edit" size={24} color="white" />} onPress={onEdit} style={styles.editButton} />
+                        <IconButton icon={() => <MaterialIcons name="delete-outline" size={24} color="white" />} onPress={onDelete} style={styles.deleteButton} />
                     </Card.Actions>
                 </View>
             </Card>

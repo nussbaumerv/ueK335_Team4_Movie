@@ -31,7 +31,6 @@ const Stack = createNativeStackNavigator();
     <NavigationContainer>
         <Stack.Navigator initialRouteName="HomePage" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Navbar" component={Tabs} />
-            <Stack.Screen name='MovieDetail' component={MovieDetail} />
         </Stack.Navigator>
     </NavigationContainer>
     )

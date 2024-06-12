@@ -16,7 +16,7 @@ export default function MoviePage() {
   const theme = useTheme();
   const scrollViewRef = React.useRef();
   const [showBackToTop, setShowBackToTop] = React.useState(false);
-
+  
   const handleScroll = (event : any) => {
     const { y } = event.nativeEvent.contentOffset;
     setShowBackToTop(y > 0); 

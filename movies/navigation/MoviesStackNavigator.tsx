@@ -10,6 +10,7 @@ export default function MoviesStackNavigator() {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="MoviesList" component={MoviesPage} />
       <Stack.Screen name="MovieDetail" component={MovieDetail} />
+      <Stack.Screen name="MoviesSubPage" component={MoviesPage}/>
     </Stack.Navigator>
   );
 }
