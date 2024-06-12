@@ -18,6 +18,7 @@ import LogoutPage from '../components/pages/LogoutPage';
 import MovieAdd from '../components/pages/MovieAdd';
 import MovieDetail from '../components/MovieDetail';
 import { DarkScheme } from '../components/theme/DarkScheme';
+import MovieEdit from '../components/pages/MovieEdit';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -108,11 +109,11 @@ export default function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="MovieAdd" component={MovieAdd}></Stack.Screen>
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register1" component={Register1Page} />
         <Stack.Screen name="Register2" component={Register2Page} />
         <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="MovieAdd" component={MovieAdd} />
         <Stack.Screen name="EasterEgg" component={EasterEgg} />
         <Stack.Screen name="Logout" component={LogoutPage} options={{ headerShown: false, gestureEnabled: false }} />
 

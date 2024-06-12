@@ -22,4 +22,9 @@ export const MovieAPI = (api: AxiosInstance = baseInstance) => ({
     const response = await api.post("film", values);
     return response.data;
   },
+
+  updateMovieById: async (id: number, values: MovieType) => {
+    const response = await api.put("film/" + id, values);
+    return response.data as MovieType;
+  },
 });
