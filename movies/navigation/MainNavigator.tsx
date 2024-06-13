@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import MoviesStackNavigator from './MoviesStackNavigator';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text, BottomNavigation } from 'react-native-paper';
+import { BottomNavigation } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomePage from '../components/pages/HomePage';
 import MoviesPage from '../components/pages/MoviesPage';
@@ -15,14 +13,16 @@ import Register2Page from '../components/pages/Register2Page';
 import LoginPage from '../components/pages/LoginPage';
 import EasterEgg from '../components/pages/EasterEgg';
 import LogoutPage from '../components/pages/LogoutPage';
-import MovieAdd from '../components/pages/MovieAdd';
 import MovieDetail from '../components/MovieDetail';
-import { DarkScheme } from '../components/theme/DarkScheme';
 import MovieEdit from '../components/pages/MovieEdit';
+import MovieAdd from '../components/pages/MovieAdd';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+/**
+ * Bottom Tab Navigator for main app navigation.
+ */
 function TabNavigation() {
   return (
     <Tab.Navigator
@@ -83,7 +83,7 @@ function TabNavigation() {
       />
       <Tab.Screen
         name="Movies"
-        component={MoviesStackNavigator}
+        component={MoviesPage}
         options={{
           tabBarLabel: 'Movies',
           tabBarIcon: ({ color, size }) => {
@@ -105,6 +105,9 @@ function TabNavigation() {
   );
 }
 
+/**
+ * Main Stack Navigator for handling authentication and nested navigation.
+ */
 export default function MainStackNavigator() {
   return (
     <NavigationContainer>
@@ -113,17 +116,14 @@ export default function MainStackNavigator() {
         <Stack.Screen name="Register1" component={Register1Page} />
         <Stack.Screen name="Register2" component={Register2Page} />
         <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="MovieAdd" component={MovieAdd} />
+        <Stack.Screen name="MoviesList" component={MoviesPage} />
         <Stack.Screen name="MovieDetail" component={MovieDetail} />
+        <Stack.Screen name="MoviesSubPage" component={MoviesPage} />
+        <Stack.Screen name="EditMovie" component={MovieEdit} />
+        <Stack.Screen name="MovieAdd" component={MovieAdd} />
         <Stack.Screen name="EasterEgg" component={EasterEgg} />
         <Stack.Screen name="Logout" component={LogoutPage} options={{ headerShown: false, gestureEnabled: false }} />
-
       </Stack.Navigator>
     </NavigationContainer>
   )
 }
-
-
-
-
-

@@ -1,15 +1,22 @@
 import { Alert, StyleSheet, Text, View } from 'react-native';
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { Button, useTheme } from 'react-native-paper';
 import { LoginAPIRequest } from '../../service/Auth';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-
+/**
+ * LogoutPage component handles user logout functionality.
+ * It logs the user out on component mount and provides an option to log in again.
+ */
 function LogoutPage() {
   const navigation = useNavigation();
   const theme = useTheme();
 
+  /**
+   * Function to log out the user.
+   * Shows an alert on error during logout.
+   */
   const logoutUser = async () => {
     try {
       await LoginAPIRequest().logout();

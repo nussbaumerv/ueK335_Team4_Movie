@@ -13,10 +13,13 @@ import { UserAPI } from '../../service/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserType } from "../../types/User";
 import 'react-native-gesture-handler';
-import { useNavigation, Link } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
+/**
+* The main component of the game.
+* Handles game logic, user interaction, and rendering.
+*/
 const App = () => {
   const navigation = useNavigation();
   const [isGameOver, setIsGameOver] = useState(false);
@@ -28,10 +31,17 @@ const App = () => {
   const speedIncreaseInterval = useRef(null);
 
   const emojis = ['🎞️', '📽️', '📀', '🎦', '⭐', '👥', '👤', '🎥', '🎬', '🍿', '🎭', '🎫', '📺', '🖥️', '🦸', '🦹', '👽', '🤖', '🥤', '👾', '🎟️', '📜', '📉', '📝', '📸', '🕶️', '🎧', '🎵', '🕵️', '🚀', '👑'];
+
+  /**
+   * Returns a random emoji from the emojis array.
+   */
   const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
   const [obstacleEmoji, setObstacleEmoji] = useState(randomEmoji());
   const [user, setUser] = useState<UserType | null>(null);
 
+  /**
+   * Loads the user data from the API and stores it in the state.
+   */
   useEffect(() => {
     const loadUser = async () => {
       const userApi = UserAPI();
@@ -43,6 +53,9 @@ const App = () => {
     loadUser();
   }, []);
 
+  /**
+   * Handles the jump action of the dino.
+   */
   const jump = () => {
     if (!isGameOver && dinoBottom._value === 100) {
       Animated.sequence([
@@ -62,6 +75,9 @@ const App = () => {
     }
   };
 
+  /**
+   * Starts the game loop and the speed increase interval.
+   */
   const startGame = () => {
     gameInterval.current = setInterval(() => {
       obstacleLeft.setValue(obstacleLeft._value - obstacleSpeed.current);
@@ -90,12 +106,18 @@ const App = () => {
     }, 2000);
   };
 
+  /**
+   * Handles the game over state and clears the game intervals.
+   */
   const gameOver = () => {
     setIsGameOver(true);
     clearInterval(gameInterval.current);
     clearInterval(speedIncreaseInterval.current);
   };
 
+  /**
+   * Restarts the game by resetting the state and calling startGame.
+   */
   const restartGame = () => {
     setIsGameOver(false);
     setScore(0);
@@ -106,6 +128,9 @@ const App = () => {
     startGame();
   };
 
+  /**
+   * Starts the game on component mount and clean up intervals on unmount
+   */
   useEffect(() => {
     startGame();
     return () => {

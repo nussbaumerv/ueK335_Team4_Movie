@@ -3,20 +3,22 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { PaperProvider, useTheme } from 'react-native-paper';
 import MainStackNavigator from './navigation/MainNavigator';
 import { StyleSheet } from 'react-native';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { DarkScheme } from './components/theme/DarkScheme';
 
+/**
+ * Main application component.
+ * Renders the navigation structure wrapped in necessary providers and themes.
+ */
 const App = () => {
-  const theme = useTheme;
+  const theme = useTheme();
 
   return (
     <PaperProvider theme={DarkScheme}>
-    <SafeAreaProvider>
-      <SafeAreaView edges={['top']} style={styles.container}>
-            <MainStackNavigator />
-        
-      </SafeAreaView>
-    </SafeAreaProvider>
+      <SafeAreaProvider>
+        <SafeAreaView edges={['top']} style={styles.container}>
+          <MainStackNavigator />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </PaperProvider>
   );
 };

@@ -5,16 +5,28 @@ import { TextInput, Button, useTheme } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
 import { Link, useNavigation } from '@react-navigation/native';
 
+/**
+ * Interface representing form values for registration.
+ */
 interface FormValues {
   email: string;
   password: string;
 }
 
+/**
+ * Register1Page component handles user registration step 1 using Formik for form management.
+ */
 const Register1Page: React.FC = () => {
   const [loginError, setLoginError] = useState<string | null>(null);
   const navigation = useNavigation();
   const theme = useTheme();
 
+  /**
+   * Validation function for the registration form.
+   * Ensures email and password fields are filled correctly.
+   * @param values - Form values containing email and password.
+   * @returns Errors object indicating validation issues.
+   */
   const validate = (values: FormValues) => {
     const errors: { email?: string; password?: string } = {};
 
@@ -31,6 +43,9 @@ const Register1Page: React.FC = () => {
     return errors;
   };
 
+  /**
+   * Styles for components in the Register1Page.
+   */
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -70,7 +85,6 @@ const Register1Page: React.FC = () => {
       validate={validate}
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(false);
-        // Navigate to register2 and pass all values
         navigation.navigate('Register2', values);
       }}
     >
@@ -123,12 +137,11 @@ const Register1Page: React.FC = () => {
           >
             {isSubmitting ? 'Registering...' : 'Next'}
           </Button>
-          <Text style={styles.normalText}>Already have an Account? <Link style={styles.link} to={{screen: 'Login'}}>Login here</Link></Text>
+          <Text style={styles.normalText}>Already have an Account? <Link style={styles.link} to={{ screen: 'Login' }}>Login here</Link></Text>
         </View>
       )}
     </Formik>
   );
 };
-
 
 export default Register1Page;

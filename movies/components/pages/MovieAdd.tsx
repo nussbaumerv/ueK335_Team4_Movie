@@ -1,16 +1,22 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
-import { LoginAPIRequest } from '../../service/Auth';
-import { Link, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { MovieAPI } from '../../service/Movie';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MovieType } from '../../types/Movie';
 
-
-
+/**
+ * Interface for the form values used in the MovieAdd component.
+ */
 interface FormValues {
   title: string;
   year: string;
@@ -23,11 +29,19 @@ interface FormValues {
   thumbnail_height: string;
 }
 
+/**
+ * Functional component for adding a movie.
+ */
 const MovieAdd: React.FC = () => {
   const navigation = useNavigation();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const theme = useTheme();
 
+  /**
+   * Validation function for form fields.
+   * @param values - Current values of the form.
+   * @returns An object containing errors for invalid fields.
+   */
   const validate = (values: FormValues) => {
     const errors: Partial<FormValues> = {};
 
@@ -84,6 +98,9 @@ const MovieAdd: React.FC = () => {
     return errors;
   };
 
+  /**
+   * Styles for components in the MovieAdd screen.
+   */
   const styles = StyleSheet.create({
     keyboardAvoidingContainer: {
       flex: 1,
@@ -134,8 +151,10 @@ const MovieAdd: React.FC = () => {
       color: 'white',
     },
   });
-  
 
+  /**
+   * Renders the MovieAdd component.
+   */
   return (
     <Formik
       initialValues={{

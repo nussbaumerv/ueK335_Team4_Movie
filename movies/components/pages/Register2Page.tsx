@@ -6,12 +6,18 @@ import { Formik, FormikProps } from 'formik';
 import { RegisterAPIRequest } from '../../service/Auth';
 import { useNavigation, useRoute, Link } from '@react-navigation/native';
 
+/**
+ * Interface representing form values for registration step 2.
+ */
 interface FormValues {
   firstname: string;
   lastname: string;
   age: number;
 }
 
+/**
+ * Register2Page component handles user registration step 2 using Formik for form management.
+ */
 const Register2Page: React.FC = () => {
   const route = useRoute();
   const { email, password } = route.params as { email: string; password: string };
@@ -19,6 +25,12 @@ const Register2Page: React.FC = () => {
   const theme = useTheme();
   const [registerError, setRegisterError] = useState<string | null>(null);
 
+  /**
+   * Validation function for the registration form step 2.
+   * Ensures firstname, lastname, and age fields are filled correctly.
+   * @param values - Form values containing firstname, lastname, and age.
+   * @returns Errors object indicating validation issues.
+   */
   const validate = (values: FormValues) => {
     const errors: { firstname?: string; lastname?: string; age?: string } = {};
 
@@ -32,13 +44,16 @@ const Register2Page: React.FC = () => {
 
     if (!values.age) {
       errors.age = 'Age is required';
-    } else if (!/^\d+$/.test(values.age)) {
+    } else if (!/^\d+$/.test(values.age.toString())) {
       errors.age = 'Age must be a number';
     }
 
     return errors;
   };
 
+  /**
+   * Styles for components in the Register2Page.
+   */
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -113,7 +128,7 @@ const Register2Page: React.FC = () => {
             mode="outlined"
             onChangeText={handleChange('age')}
             onBlur={handleBlur('age')}
-            value={values.age}
+            value={values.age.toString()}
             keyboardType="numeric"
             error={touched.age && !!errors.age}
           />
@@ -146,7 +161,6 @@ const Register2Page: React.FC = () => {
           {touched.lastname && errors.lastname && (
             <Text style={styles.errorText}>{errors.lastname}</Text>
           )}
-
 
           {registerError && <Text style={styles.errorText}>{registerError}</Text>}
 

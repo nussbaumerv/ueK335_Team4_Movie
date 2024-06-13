@@ -8,6 +8,9 @@ import { MovieAPI } from '../../service/Movie';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MovieType } from '../../types/Movie';
 
+/**
+ * Interface for the form values used in MovieEdit component.
+ */
 interface FormValues {
   title: string;
   year: string;
@@ -20,6 +23,10 @@ interface FormValues {
   thumbnail_height: string;
 }
 
+/**
+ * Functional component for editing movie details.
+ * @param route - React Navigation route object containing parameters.
+ */
 const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
   const navigation = useNavigation();
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -27,6 +34,9 @@ const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
   const { movieId } = route.params;
   const theme = useTheme();
 
+  /**
+   * Effect hook to load the movie data when the component mounts or movieId changes.
+   */
   useEffect(() => {
     const loadMovie = async () => {
       try {
@@ -41,6 +51,11 @@ const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
     loadMovie();
   }, [movieId]);
 
+  /**
+   * Validation function to validate form values.
+   * @param values - Current form values to be validated.
+   * @returns Partial errors object containing validation errors.
+   */
   const validate = (values: FormValues) => {
     const errors: Partial<FormValues> = {};
 
@@ -97,6 +112,9 @@ const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
     return errors;
   };
 
+  /**
+   * Styles for components in the MovieEdit screen.
+   */
   const styles = StyleSheet.create({
     keyboardAvoidingContainer: {
       flex: 1,
@@ -147,6 +165,10 @@ const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
       color: 'white',
     },
   });
+
+  /**
+   * Renders the MovieEdit component.
+   */
 
   return (
     <Formik

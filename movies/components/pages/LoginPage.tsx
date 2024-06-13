@@ -12,19 +12,28 @@ interface FormValues {
   password: string;
 }
 
+/**
+ * LoginPage component handles user login using Formik for form management.
+ * Upon successful login, it navigates the user to the main app screen.
+ */
 const LoginPage: React.FC = () => {
   const navigation = useNavigation();
   const theme = useTheme();
   const [loginError, setLoginError] = useState<string | null>(null);
 
   useEffect(() => {
+    /**
+     * Checks if the user is already logged in.
+     * If logged in, navigates to the main app screen.
+     * If not logged in and an error occurs, logs the error.
+     */
     const checkLoggedIn = async () => {
       try {
         await UserAPI().isLoggedIn();
         navigation.navigate('TabNavigation');
       } catch (error: any) {
         if (error.response && error.response.status !== 401) {
-          console.log("User isn't lodged in yet");
+          console.log("User isn't logged in yet");
         }
       }
     };
@@ -32,6 +41,12 @@ const LoginPage: React.FC = () => {
     checkLoggedIn();
   }, [navigation]);
 
+  /**
+   * Validation function for the login form.
+   * Ensures email and password fields are filled correctly.
+   * @param values - Form values containing email and password.
+   * @returns Errors object indicating validation issues.
+   */
   const validate = (values: FormValues) => {
     const errors: { email?: string; password?: string } = {};
 
@@ -48,6 +63,9 @@ const LoginPage: React.FC = () => {
     return errors;
   };
 
+  /**
+   * Styles for components in the LoginPage.
+   */
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -94,7 +112,7 @@ const LoginPage: React.FC = () => {
           })
           .catch((error) => {
             if (error.response && error.response.status === 400) {
-              setLoginError('Wrong email and or password.');
+              setLoginError('Wrong email and/or password.');
             } else {
               setLoginError('An unexpected error occurred. Please try again.');
               console.error('An error occurred:', error);
@@ -154,7 +172,9 @@ const LoginPage: React.FC = () => {
           >
             {isSubmitting ? 'Logging in...' : 'Login'}
           </Button>
-          <Text style={styles.normalText}>Don't have an account yet? <Link style={styles.link} to={{screen: 'Register1'}}>Register here</Link></Text>
+          <Text style={styles.normalText}>
+            Don't have an account yet? <Link style={styles.link} to={{ screen: 'Register1' }}>Register here</Link>
+          </Text>
         </View>
       )}
     </Formik>
