@@ -191,7 +191,6 @@ const MovieAdd: React.FC = () => {
               setSubmitError('Error submitting the form.');
             } else {
               setSubmitError('An unexpected error occurred. Please try again.');
-              console.error('An error occurred:', error);
             }
           })
           .finally(() => {

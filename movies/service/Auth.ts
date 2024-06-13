@@ -18,7 +18,6 @@ export const LoginAPIRequest = (api: AxiosInstance = baseInstance) => ({
       await AsyncStorage.removeItem("accessToken");
       await AsyncStorage.removeItem("userId");
     } catch (error) {
-      console.error("Error logging out:", error);
       throw error;
     }
   },
@@ -35,8 +34,6 @@ export const RegisterAPIRequest = (api: AxiosInstance = baseInstance) => ({
     });
     AsyncStorage.setItem("accessToken", response.data.accessToken);
     AsyncStorage.setItem("userId", String(response.data.user.id));
-    console.log("Gotten" + response.data.user.id);
-    console.log("Gotten" + AsyncStorage.getItem("userId"));
     return response.data;
   },
 });

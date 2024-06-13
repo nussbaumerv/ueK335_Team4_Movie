@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import { Formik, FormikProps } from 'formik';
 import { useNavigation } from '@react-navigation/native';
@@ -44,7 +44,7 @@ const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
         const fetchedMovie = await movieApi.getMovieById(movieId);
         setMovie(fetchedMovie);
       } catch (error) {
-        console.error('Error fetching movie by ID:', error);
+        Alert.alert("Movie can't be loaded", "Please try again later");
       }
     };
 
@@ -207,7 +207,6 @@ const MovieEdit: React.FC<{ route: any }> = ({ route }) => {
               setSubmitError('Error submitting the form.');
             } else {
               setSubmitError('An unexpected error occurred. Please try again.');
-              console.error('An error occurred:', error);
             }
           })
           .finally(() => {

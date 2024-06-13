@@ -103,7 +103,6 @@ const Register2Page: React.FC = () => {
               setRegisterError('Email is already used.');
             } else {
               setRegisterError('An unexpected error occurred. Please try again.');
-              console.error('An error occurred:', error);
             }
           })
           .finally(() => {

@@ -39,7 +39,6 @@ export default function HomePage() {
           navigation.navigate('Login');
         } else {
           Alert.alert("User can't be loaded", "Please try again later");
-          console.error('Error fetching user by ID:', error);
         }
       }
     };
@@ -64,8 +63,7 @@ export default function HomePage() {
             if (error.response && (error.response.status === 403 || error.response.status === 401)) {
               navigation.navigate('Login');
             } else {
-              Alert.alert("Movies can't be loaded", "Please try again later");
-              console.error('Error fetching movies:', error);
+              Alert.alert("Movie can't be loaded", "Please try again later");
             }
             feedbackGiven = true;
           }

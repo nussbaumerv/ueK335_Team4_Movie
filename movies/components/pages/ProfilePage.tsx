@@ -68,7 +68,6 @@ export default function ProfilePage() {
           navigation.navigate('Login');
         } else {
           Alert.alert("User can't be loaded", "Please try again later");
-          console.error('Error fetching user by ID:', error);
         }
       }
     };

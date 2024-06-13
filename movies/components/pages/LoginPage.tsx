@@ -32,9 +32,6 @@ const LoginPage: React.FC = () => {
         await UserAPI().isLoggedIn();
         navigation.navigate('TabNavigation');
       } catch (error: any) {
-        if (error.response && error.response.status !== 401) {
-          console.log("User isn't logged in yet");
-        }
       }
     };
 
@@ -115,7 +112,6 @@ const LoginPage: React.FC = () => {
               setLoginError('Wrong email and/or password.');
             } else {
               setLoginError('An unexpected error occurred. Please try again.');
-              console.error('An error occurred:', error);
             }
           })
           .finally(() => {
