@@ -6,6 +6,10 @@
 - [Auftrag](Resourcen/04_Auftrag-MovieDetailsChecker_V1.pdf)
 - [Testing Sheet]()
 
+## Frameworks
+- React Native
+- React Native Paper
+
 ## Installationsanleitung
 ### 1. Voraussetzungen
 Diese Tools müssen bereits installiert sein.
