@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme, Divider, IconButton, Button, Chip } from 'react-native-paper';
 import CustomButton from '../atoms/CustomButton';
 import AddButton from '../atoms/AddButton';
-import LogoutButton from '../atoms/LogoutButton';
+import SearchButton from '../atoms/SearchButton';
 import MovieCard from '../molecules/MovieCard';
 import { useEffect, useState } from 'react';
 import { MovieAPI } from '../../service/Movie';
@@ -13,6 +13,7 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SortModal from '../molecules/SortModal';
 import { MovieTypeWithExtras } from '../../types/MovieWithExtras';
+import { move } from 'formik';
 
 export default function MoviePage() {
   const navigation = useNavigation();
@@ -30,6 +31,8 @@ export default function MoviePage() {
   const [expandedModalHeight, setExpandedModalHeight] = useState(0);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [activeSorter, setActiveSorter] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
 
   const handleScroll = (event: any) => {
     const { y } = event.nativeEvent.contentOffset;
@@ -42,7 +45,6 @@ export default function MoviePage() {
         const movieApi = MovieAPI();
         const fetchedMovies = await movieApi.getMovies();
         const storedMovies = await loadStoredMovies(); // Load stored movie data
-
         if (storedMovies) {
           // Merge fetched movies with stored ratings and favorite status
           const mergedMovies = fetchedMovies.map(movie => ({
@@ -120,6 +122,13 @@ export default function MoviePage() {
     closeSortModal();
   };
 
+
+  const clearSearch = () => {
+    setSearchQuery(null);
+    setFilteredMovies(movies);
+    closeSearchModal();
+  };
+
   const toggleGenreFilter = () => {
     setExpandGenre(!expandGenre);
     if (!expandGenre) {
@@ -158,6 +167,20 @@ export default function MoviePage() {
 
   const closeSortModal = () => {
     setShowSortModal(false);
+  };
+  const openSearchModal = () => {
+    setShowSearchModal(true);
+  };
+
+  const closeSearchModal = () => {
+    setShowSearchModal(false); // Reset filtered movies to original list
+  };
+
+  const handleSearch = () => {
+    const filtered = movies?.filter(movie => movie.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    setFilteredMovies(filtered);
+    setActiveFilter(`Search: ${searchQuery}`);
+    closeSearchModal();
   };
 
   const sortMoviesByRating = () => {
@@ -199,26 +222,8 @@ export default function MoviePage() {
   };
 
   const genres = [
-    "Action",
-    "Comedy",
-    "Drama",
-    "Horror",
-    "Supernatural",
-    "Science Fiction",
-    "Crime",
-    "Mystery",
-    "Thriller",
-    "Adventure",
-    "Fantasy",
-    "War",
-    "Superhero",
-    "Family",
-    "Romance",
-    "Historical",
-    "Political",
-    "Teen",
-    "Animated",
-    "Sports"
+    "Action", "Comedy", "Drama", "Horror", "Supernatural", "Science Fiction", "Crime", "Mystery", "Thriller", "Adventure", 
+    "Fantasy", "War", "Superhero", "Family", "Romance", "Historical", "Political", "Teen", "Animated", "Sports"
   ];
 
   const styles = StyleSheet.create({
@@ -266,7 +271,7 @@ export default function MoviePage() {
       height: '120%',
       width: 1,
       marginHorizontal: 10,
-      backgroundColor: '#49454F',
+      backgroundColor: theme.colors.secondary,
     },
     movieContainer: {
       marginTop: Dimensions.get('window').height * 0.225 + expandedModalHeight + 10,
@@ -275,7 +280,7 @@ export default function MoviePage() {
       position: 'absolute',
       bottom: 20,
       left: 20,
-      backgroundColor: '#393540',
+      backgroundColor: theme.colors.onSecondary,
       borderRadius: 30,
       width: 50,
       height: 50,
@@ -285,18 +290,17 @@ export default function MoviePage() {
     },
     backToTopIcon: {
       fontSize: 24,
-      color: 'white',
+      color: theme.colors.onSurface,
     },
     arrowUpIcon: {
       fontSize: 24,
-      color: 'white',
+      color: theme.colors.onSurface,
     },
     filterText: {
-      color: 'white',
+      color: theme.colors.onSurface,
       fontSize: 20,
       marginBottom: 5,
     },
-    filterButton: {},
     filterScrollView: {
       maxHeight: 300,
       marginTop: 10,
@@ -309,14 +313,14 @@ export default function MoviePage() {
       zIndex: 1,
     },
     filterModal: {
-      backgroundColor: '#141218',
+      backgroundColor: theme.colors.inverseOnSurface,
       padding: 20,
       borderRadius: 12,
       width: '80%',
       alignItems: 'center',
     },
     sortModal: {
-      backgroundColor: '#141218',
+      backgroundColor: theme.colors.inverseOnSurface,
       padding: 20,
       borderRadius: 12,
       width: '80%',
@@ -324,12 +328,22 @@ export default function MoviePage() {
     },
     modalOption: {
       fontSize: 18,
-      color: 'white',
+      color: theme.colors.onSurface,
       marginVertical: 10,
     },
     closeButton: {
       marginTop: 20,
-      borderColor: 'white',
+      backgroundColor: theme.colors.onError,
+    },
+    closeButtonText: {
+      color: theme.colors.error,
+    },
+    clearButton: {
+      marginTop: 20,
+      backgroundColor: theme.colors.secondaryContainer,
+    },
+    clearButtonText: {
+      color: theme.colors.onSecondaryContainer,
     },
     modalContainer: {
       flex: 1,
@@ -339,9 +353,20 @@ export default function MoviePage() {
     },
     filterHeader: {
       fontSize: 18,
-      color: 'white',
+      color: theme.colors.onSurface,
       marginVertical: 10,
     },
+    searchInput: {
+      width: '100%',
+      padding: 10,
+      marginVertical: 10,
+      backgroundColor: theme.colors.surface,
+      color: theme.colors.onSurface,
+      borderRadius: 5,
+    },
+    expandButton : {
+      color: theme.colors.onSecondary,
+    }
   });
 
   return (
@@ -359,15 +384,16 @@ export default function MoviePage() {
         </View>
         <Divider style={styles.divider} />
         <View style={styles.buttonWrapper}>
-          <LogoutButton onPress={() => navigation.navigate('Screen4', { name: 'Screen4' })} />
+          <SearchButton onPress={openSearchModal} />
         </View>
       </View>
       <View style={styles.filterChipContainer}>
-      {activeSorter && <Text style={{ color: 'white', marginLeft: 10 }}>Sorting by: {activeSorter}</Text>}
-      <View style={styles.filterInnerChipContainer}>
-        {selectedGenre && <Chip onClose={clearFilter}>Genre: {selectedGenre}</Chip>}
-        {selectedYear && <Chip onClose={clearFilter}>Year: {selectedYear}</Chip>}
-      </View>
+        {activeSorter && <Text style={{ color: theme.colors.onSecondary, marginLeft: 10 }}>Sorting by: {activeSorter}</Text>}
+        <View style={styles.filterInnerChipContainer}>
+          {selectedGenre && <Chip onClose={clearFilter}>Genre: {selectedGenre}</Chip>}
+          {selectedYear && <Chip onClose={clearFilter}>Year: {selectedYear}</Chip>}
+          {searchQuery && <Chip onClose={clearSearch}>Search: {searchQuery}</Chip>}
+        </View>
       </View>
       <ScrollView ref={scrollViewRef} style={styles.movieContainer} onScroll={handleScroll}>
         {filteredMovies && filteredMovies.map(movie => (
@@ -391,7 +417,7 @@ export default function MoviePage() {
               <Text style={styles.filterText}>Filter by Genre:</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity onPress={toggleGenreFilter}>
-                  <Text style={{ fontSize: 18, color: '#aaa' }}>{selectedGenre || 'Select Genre'}</Text>
+                  <Text style={{ fontSize: 18, color:  theme.colors.onSurface }}>{selectedGenre || 'Select Genre'}</Text>
                 </TouchableOpacity>
                 <IconButton
                   icon={expandGenre ? 'chevron-up' : 'chevron-down'}
@@ -404,7 +430,7 @@ export default function MoviePage() {
                 <ScrollView style={styles.filterScrollView}>
                   {genres.map(genre => (
                     <TouchableOpacity key={genre} onPress={() => filterMoviesByGenre(genre)}>
-                      <Text style={{ fontSize: 16, marginVertical: 5, color: 'white' }}>{genre}</Text>
+                      <Text style={{ fontSize: 16, marginVertical: 5, color: theme.colors.onSurface }}>{genre}</Text>
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
@@ -414,7 +440,7 @@ export default function MoviePage() {
               <Text style={styles.filterText}>Filter by Year:</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity onPress={toggleYearFilter}>
-                  <Text style={{ fontSize: 18, color: '#aaa' }}>{selectedYear || 'Select Year'}</Text>
+                  <Text style={{ fontSize: 18, color: theme.colors.onSurface }}>{selectedYear || 'Select Year'}</Text>
                 </TouchableOpacity>
                 <IconButton
                   icon={expandYear ? 'chevron-up' : 'chevron-down'}
@@ -427,17 +453,17 @@ export default function MoviePage() {
                 <ScrollView style={styles.filterScrollView}>
                   {years.map(year => (
                     <TouchableOpacity key={year} onPress={() => filterMoviesByYear(year)}>
-                      <Text style={{ fontSize: 16, marginVertical: 5, color: 'white' }}>{year}</Text>
+                      <Text style={{ fontSize: 16, marginVertical: 5, color: theme.colors.onSurface }}>{year}</Text>
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
               )}
             </View>
-            <Button mode="outlined" onPress={clearFilter} style={styles.closeButton}>
-              Clear Filter
+            <Button onPress={clearFilter} style={styles.clearButton}>
+              <Text style={styles.clearButtonText}>Clear Filter</Text>
             </Button>
-            <Button mode="outlined" onPress={closeFilterModal} style={styles.closeButton}>
-              Close
+            <Button onPress={closeFilterModal} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Close</Text>
             </Button>
           </View>
         </View>
@@ -450,6 +476,29 @@ export default function MoviePage() {
         onSortByTitle={sortMoviesByTitle}
         noSort={clearSorter}
       />
+      <Modal visible={showSearchModal} onRequestClose={closeSearchModal} animationType="slide" transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.filterModal}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search by title..."
+              placeholderTextColor={theme.colors.secondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              onSubmitEditing={handleSearch}
+            />
+            <Button mode="outlined" onPress={handleSearch} style={styles.closeButton}>
+              Search
+            </Button>
+            <Button mode="outlined" onPress={clearSearch} style={styles.closeButton}>
+              Clear Search
+            </Button>
+            <Button mode="outlined" onPress={closeSearchModal} style={styles.closeButton}>
+              Close
+            </Button>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

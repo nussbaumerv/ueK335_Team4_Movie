@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { Card, IconButton } from 'react-native-paper';
+import { Card, IconButton, ThemeProvider, useTheme } from 'react-native-paper';
 import { MovieType } from '../../types/Movie';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,6 +15,8 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
 
   const [rating, setRating] = React.useState(movie.rating || 0);
   const [isFavorite, setIsFavorite] = React.useState(movie.isFavorite || false);
+
+  const theme = useTheme();
 
   const loadStoredMovies = async () => {
     try {
@@ -105,6 +107,51 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
     return index <= rating ? 'star' : 'star-outline';
   };
 
+  const styles = StyleSheet.create({
+    card: {
+      margin: 5,
+      backgroundColor: theme.colors.secondaryContainer,
+    },
+    cardContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 10,
+    },
+    image: {
+      width: screenWidth * 0.2,
+      height: screenWidth * 0.27,
+      borderRadius: 8,
+      marginRight: 10,
+    },
+    textContainer: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+    title: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: theme.colors.onSurface,
+      paddingTop: screenWidth * 0.04,
+      paddingBottom: 10,
+    },
+    subtitle: {
+      fontSize: 14,
+      color: theme.colors.onSurface,
+    },
+    ratingContainer: {
+      flexDirection: 'row',
+      marginTop: 5,
+    },
+    starButton: {
+      marginRight: 5,
+    },
+    favorite: {
+      position: 'absolute',
+      top: screenWidth * 0.04,
+      right: screenWidth * 0.04,
+    },
+  });
+
   return (
     <Card style={styles.card}>
       <View style={styles.cardContent}>
@@ -136,49 +183,6 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    margin: 5,
-    backgroundColor: '#141218',
-  },
-  cardContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-  },
-  image: {
-    width: screenWidth * 0.2,
-    height: screenWidth * 0.27,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  textContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-    paddingTop: screenWidth * 0.04,
-    paddingBottom: 10,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: 'white',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  starButton: {
-    marginRight: 5,
-  },
-  favorite: {
-    position: 'absolute',
-    top: screenWidth * 0.04,
-    right: screenWidth * 0.04,
-  },
-});
+
 
 export default MovieCard;

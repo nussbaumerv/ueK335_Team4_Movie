@@ -15,7 +15,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
         container: {
             flex: 1,
             position: 'absolute',
-            backgroundColor: theme.colors.onBackground,
+            backgroundColor: theme.colors.background,
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
@@ -24,7 +24,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
         card: {
             marginTop: Dimensions.get('window').height * 0.05,
             width: Dimensions.get('window').width * 0.8,
-            backgroundColor: '#141218', // Card background color
+            backgroundColor: theme.colors.secondaryContainer, // Card background color
             borderRadius: 12,
             overflow: 'hidden', // Fix for the warning
         },
@@ -44,7 +44,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
             top: Dimensions.get('window').height * 0.03,
             width: 40,
             height: 40,
-            backgroundColor: '#393540',
+            backgroundColor: theme.colors.onSecondary,
             borderRadius: 12,
             borderWidth: 0,
             shadowColor: 'transparent',
@@ -55,7 +55,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
             paddingTop: 30,
             fontSize: 32,
             fontFamily: 'Roboto',
-            color: 'white', // Title text color
+            color: theme.colors.onSurface, // Title text color
         },
         imageContainer: {
             justifyContent: 'center',
@@ -73,17 +73,17 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
             fontSize: 18,
             marginTop: 10,
             marginBottom: 5,
-            color: 'white', // Subtitle text color
+            color: theme.colors.onSurface, 
         },
         normalText: {
             fontSize: 16,
             marginBottom: 10,
-            color: 'white', // Normal text color
+            color: theme.colors.onSurface, 
         },
         castText: {
             fontSize: 14,
             marginBottom: 5,
-            color: 'white', // Cast text color
+            color: theme.colors.onSurface, 
         },
         actions: {
             justifyContent: 'center',
@@ -93,7 +93,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
         deleteButton: {
             width: 40,
             height: 40,
-            backgroundColor: '#DC362E',
+            backgroundColor: theme.colors.onError,
             borderRadius: 12,
             justifyContent: 'center',
             alignItems: 'center',
@@ -105,7 +105,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
         editButton: {
             width: 40,
             height: 40,
-            backgroundColor: '#393540',
+            backgroundColor: theme.colors.onSecondary,
             borderRadius: 12,
             justifyContent: 'center',
             alignItems: 'center',
@@ -128,15 +128,14 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
                             mode="contained"
                             onPress={() => navigation.goBack()}
                             style={styles.backButton}
-                            iconColor="white"
+                            iconColor={theme.colors.onSurface}
                         />
                         <Text style={[styles.title, { marginLeft: titleMargin }]}>{movie.title}</Text>
                     </View>
                     <View style={styles.imageContainer}>
                         <Card.Cover source={{ uri: movie.thumbnail }} style={styles.image} />
                     </View>
-                    <ScrollView style={styles.scrollViewContent}
-                    indicatorStyle="white" >
+                    <ScrollView style={styles.scrollViewContent} >
                         <Card.Content>
                             <Text style={styles.subtitle}>Extract</Text>
                             <Text style={styles.normalText}>{formatExtract(movie.extract)}</Text>
@@ -154,7 +153,7 @@ const MovieDetailCard = ({ movie, onDelete, onEdit }) => {
                     </ScrollView>
                     <Card.Actions style={styles.actions}>
                         <IconButton icon={() => <MaterialIcons name="edit" size={24} color="white" />} onPress={onEdit} style={styles.editButton} />
-                        <IconButton icon={() => <MaterialIcons name="delete-outline" size={24} color="white" />} onPress={onDelete} style={styles.deleteButton} />
+                        <IconButton icon={() => <MaterialIcons name="delete-outline" size={24} color={theme.colors.onSurface} />} onPress={onDelete} style={styles.deleteButton} />
                     </Card.Actions>
                 </View>
             </Card>
