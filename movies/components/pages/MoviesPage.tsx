@@ -453,8 +453,3 @@ export default function MoviePage() {
     </View>
   );
 }
-
-export type MovieTypeWithExtras = MovieType & {
-  rating?: number;
-  isFavorite?: boolean;
-};
