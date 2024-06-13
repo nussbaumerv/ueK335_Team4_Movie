@@ -8,10 +8,18 @@ import { useNavigation } from '@react-navigation/native';
 import MovieDetailCard from '../molecules/DetailMovieCard';
 import MovieDetailSkeletonLoader from '../molecules/MovieDetailSkeletonLoader';
 
+/**
+ * Deletes a movie by its ID.
+ * @param id - The ID of the movie to delete.
+ */
 function deleteMovie(id: number): void {
   MovieAPI().deleteMovieById(id);
 }
 
+/**
+ * The MovieDetailPage component displays details of a movie and provides options to delete or edit it.
+ * @param route - The route object containing the movie ID as a parameter.
+ */
 export default function MovieDetailPage({ route }: any) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
@@ -28,13 +36,16 @@ export default function MovieDetailPage({ route }: any) {
     },
   });
 
+  /**
+   * Loads the movie details from the API based on the provided ID.
+   */
   useEffect(() => {
     const loadMovie = async () => {
       try {
         const movieApi = MovieAPI();
         const fetchedMovie = await movieApi.getMovieById(id);
         setMovie(fetchedMovie);
-        setLoading(false); // Set loading to false once data is fetched
+        setLoading(false);
       } catch (error) {
         Alert.alert("Movie can't be loaded", "Please try again later");
       }
@@ -43,6 +54,10 @@ export default function MovieDetailPage({ route }: any) {
     loadMovie();
   }, [route]);
 
+  /**
+   * Handles the deletion of the movie.
+   * Displays an alert to confirm the deletion and navigates to the Movies screen upon confirmation.
+   */
   const handleDelete = () => {
     if (movie) {
       Alert.alert(
@@ -66,9 +81,13 @@ export default function MovieDetailPage({ route }: any) {
     }
   };
 
+  /**
+   * Handles the editing of the movie.
+   * Navigates to the EditMovie screen with the movie ID as a parameter.
+   */
   const handleEdit = () => {
     if (movie) {
-      navigation.navigate('EditMovie', { movieId: movie.id }); // Navigate to the EditMovie screen
+      navigation.navigate('EditMovie', { movieId: movie.id });
     }
   };
 

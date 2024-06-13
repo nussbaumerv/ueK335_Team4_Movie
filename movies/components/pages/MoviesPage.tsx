@@ -14,6 +14,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SortModal from '../molecules/SortModal';
 import { MovieTypeWithExtras } from '../../types/MovieWithExtras';
 
+/**
+ * The MoviePage component displays a list of movies and provides filtering, sorting, and search functionality.
+ */
 export default function MoviePage() {
   const navigation = useNavigation();
   const theme = useTheme();
@@ -33,40 +36,51 @@ export default function MoviePage() {
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
 
+  /**
+   * Handles the scroll event and sets the showBackToTop state.
+   * @param event - The scroll event object.
+   */
   const handleScroll = (event: any) => {
     const { y } = event.nativeEvent.contentOffset;
     setShowBackToTop(y > 0);
   };
 
+  /**
+   * Loads movies from the API and retrieves stored movie data when the component is focused.
+   */
   useFocusEffect(
     React.useCallback(() => {
-    const loadMovies = async () => {
-      try {
-        const movieApi = MovieAPI();
-        const fetchedMovies = await movieApi.getMovies();
-        const storedMovies = await loadStoredMovies(); // Load stored movie data
-        if (storedMovies) {
-          // Merge fetched movies with stored ratings and favorite status
-          const mergedMovies = fetchedMovies.map(movie => ({
-            ...movie,
-            rating: storedMovies.ratings[movie.id] || 0,
-            isFavorite: storedMovies.favorites.includes(movie.id),
-          }));
-          setMovies(mergedMovies);
-          setFilteredMovies(mergedMovies);
-        } else {
-          setMovies(fetchedMovies);
-          setFilteredMovies(fetchedMovies);
+      const loadMovies = async () => {
+        try {
+          const movieApi = MovieAPI();
+          const fetchedMovies = await movieApi.getMovies();
+          const storedMovies = await loadStoredMovies(); // Load stored movie data
+          if (storedMovies) {
+            // Merge fetched movies with stored ratings and favorite status
+            const mergedMovies = fetchedMovies.map(movie => ({
+              ...movie,
+              rating: storedMovies.ratings[movie.id] || 0,
+              isFavorite: storedMovies.favorites.includes(movie.id),
+            }));
+            setMovies(mergedMovies);
+            setFilteredMovies(mergedMovies);
+          } else {
+            setMovies(fetchedMovies);
+            setFilteredMovies(fetchedMovies);
+          }
+        } catch (error) {
+          Alert.alert("Movies can't be loaded", "Please try again later");
         }
-      } catch (error) {
-        Alert.alert("Movies can't be loaded", "Please try again later");
-      }
-    };
+      };
 
-    loadMovies(); // Call immediately on focus
-  }, []) // Empty dependency array ensures it runs only on focus changes
-);
+      loadMovies(); // Call immediately on focus
+    }, []) // Empty dependency array ensures it runs only on focus changes
+  );
 
+  /**
+   * Loads stored movie data from AsyncStorage.
+   * @returns The stored movie data or null if there is an error.
+   */
   const loadStoredMovies = async () => {
     try {
       const storedData = await AsyncStorage.getItem('movies_data');
@@ -80,6 +94,10 @@ export default function MoviePage() {
     }
   };
 
+  /**
+   * Filters movies by year and updates the filteredMovies state.
+   * @param year - The year to filter by.
+   */
   const filterMoviesByYear = (year: string) => {
     if (year) {
       const filtered = filteredMovies?.filter(movie => movie.year === Number(year));
@@ -94,6 +112,10 @@ export default function MoviePage() {
     }
   };
 
+  /**
+   * Filters movies by genre and updates the filteredMovies state.
+   * @param selectedGenre - The genre to filter by.
+   */
   const filterMoviesByGenre = (selectedGenre: string) => {
     if (selectedGenre) {
       const filtered = filteredMovies?.filter(movie => movie.genres?.includes(selectedGenre));
@@ -108,6 +130,9 @@ export default function MoviePage() {
     }
   };
 
+  /**
+   * Clears the filter and resets the filteredMovies state to the original movies list.
+   */
   const clearFilter = () => {
     setFilteredMovies(movies);
     setSelectedGenre(null);
@@ -117,19 +142,27 @@ export default function MoviePage() {
     closeSortModal();
   };
 
+  /**
+   * Clears the sorter and resets the filteredMovies state to the original movies list.
+   */
   const clearSorter = () => {
     setFilteredMovies(movies);
     setActiveSorter(null);
     closeSortModal();
   };
 
-
+  /**
+   * Clears the search query and resets the filteredMovies state to the original movies list.
+   */
   const clearSearch = () => {
     setSearchQuery(null);
     setFilteredMovies(movies);
     closeSearchModal();
   };
 
+  /**
+   * Toggles the genre filter expansion.
+   */
   const toggleGenreFilter = () => {
     setExpandGenre(!expandGenre);
     if (!expandGenre) {
@@ -137,6 +170,9 @@ export default function MoviePage() {
     }
   };
 
+  /**
+   * Toggles the year filter expansion.
+   */
   const toggleYearFilter = () => {
     setExpandYear(!expandYear);
     if (!expandYear) {
@@ -149,10 +185,17 @@ export default function MoviePage() {
     "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000",
   ];
 
+  /**
+   * Navigates to the MovieDetail screen with the selected movie's ID.
+   * @param movie - The movie object to display details for.
+   */
   const handleMoviePress = (movie: MovieType) => {
     navigation.navigate('MovieDetail', { id: movie.id });
   };
 
+  /**
+   * Opens the filter modal.
+   */
   const openFilterModal = () => {
     setShowFilterModal(true);
   };
