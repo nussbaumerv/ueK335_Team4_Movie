@@ -41,7 +41,7 @@ export default function MovieDetail({ route } : any) {
     };
 
     loadMovie();
-  }, []);
+  }, [route]);
 
   const handleDelete = () => {
     if (movie) {
