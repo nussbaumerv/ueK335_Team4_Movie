@@ -2,7 +2,7 @@
 
 ## Ressourcen
 - [Figma](https://www.figma.com/design/yUHXi9jP3VPuduXMmPDf1f/Movie-Details-Checker-Mock-Up)
-- [Dokumentation](https://github.com/nussbaumerv/ueK335_Team4_Movie/blob/develop/Resourcen/ueK335_Team4_Movie_documentation_Valentin_Dominic_Filip.docx)
+- [Dokumentation](https://github.com/nussbaumerv/ueK335_Team4_Movie/blob/develop/Resourcen/ueK335_Team4_Movie_documentation_Valentin_Dominic_Filip.pdf)
 - [Auftrag](Resourcen/04_Auftrag-MovieDetailsChecker_V1.pdf)
 - [Testing Sheet](https://github.com/nussbaumerv/ueK335_Team4_Movie/blob/develop/Resourcen/ueK335_Team4_Movie_TestingSheet.xlsx)
 
