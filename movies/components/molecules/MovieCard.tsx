@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { Card, IconButton, ThemeProvider, useTheme } from 'react-native-paper';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
+import { Card, IconButton, useTheme } from 'react-native-paper';
 import { MovieType } from '../../types/Movie';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -26,7 +26,8 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
       }
       return null;
     } catch (error) {
-      console.error('Error loading stored movies', error);
+      Alert.alert("Stored movies can't be loaded", "Please try again later");
+
       return null;
     }
   };
@@ -44,10 +45,9 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
         storedMovies.favorites.push(movieId); 
       }
       await AsyncStorage.setItem('movies_data', JSON.stringify(storedMovies));
-      console.log('Favorite toggled successfully');
       printAsyncStorage()
     } catch (error) {
-      console.error('Error toggling favorite', error);
+      Alert.alert("Favorite can't be toggled", "Please try again later");
     }
   };
 
@@ -64,7 +64,7 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
           setRating(0);
         }
       } catch (error) {
-        console.error('Error fetching movies', error);
+        Alert.alert("Movies can't be loaded", "Please try again later");
       }
     };
 
@@ -77,10 +77,9 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
       storedMovies.ratings[movieId] = rating;
       await AsyncStorage.setItem('movies_data', JSON.stringify(storedMovies));
       setRating(rating);
-      console.log('Rating saved successfully');
       printAsyncStorage();
     } catch (error) {
-      console.error('Error saving rating', error);
+      Alert.alert("Rating can't be saved", "Please try again later");
     }
   };
 
@@ -88,12 +87,10 @@ const MovieCard = ({ movie }: { movie: MovieType }) => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       const items = await AsyncStorage.multiGet(keys);
-      console.log('AsyncStorage Content:');
       items.forEach(([key, value]) => {
-        console.log(`${key}: ${value}`);
       });
     } catch (error) {
-      console.error('Error printing AsyncStorage content', error);
+      Alert.alert("Something went wrong", "Please try again later");
     }
   };
 

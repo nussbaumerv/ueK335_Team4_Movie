@@ -13,7 +13,7 @@ import Register2Page from '../components/pages/Register2Page';
 import LoginPage from '../components/pages/LoginPage';
 import EasterEgg from '../components/pages/EasterEgg';
 import LogoutPage from '../components/pages/LogoutPage';
-import MovieDetail from '../components/MovieDetail';
+import MovieDetailPage from '../components/pages/MovieDetailPage';
 import MovieEdit from '../components/pages/MovieEdit';
 import MovieAdd from '../components/pages/MovieAdd';
 
@@ -117,7 +117,7 @@ export default function MainStackNavigator() {
         <Stack.Screen name="Register2" component={Register2Page} />
         <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="MoviesList" component={MoviesPage} />
-        <Stack.Screen name="MovieDetail" component={MovieDetail} />
+        <Stack.Screen name="MovieDetail" component={MovieDetailPage} />
         <Stack.Screen name="MoviesSubPage" component={MoviesPage} />
         <Stack.Screen name="EditMovie" component={MovieEdit} />
         <Stack.Screen name="MovieAdd" component={MovieAdd} />

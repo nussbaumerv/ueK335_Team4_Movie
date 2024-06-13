@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, Modal } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 
 interface SortModalProps {

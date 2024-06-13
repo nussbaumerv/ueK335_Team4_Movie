@@ -116,7 +116,7 @@ export default function ProfilePage() {
     deleteButton: {
       width: 40,
       height: 40,
-      backgroundColor: '#DC362E',
+      backgroundColor: theme.colors.onError,
       borderRadius: 12,
       justifyContent: 'center',
       alignItems: 'center',

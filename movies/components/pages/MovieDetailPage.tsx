@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useEffect, useState } from "react";
-import { MovieAPI } from '../service/Movie';
-import { MovieType } from "../types/Movie";
+import { MovieAPI } from '../../service/Movie';
+import { MovieType } from "../../types/Movie";
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import MovieDetailCard from './molecules/DetailMovieCard';
-import MovieDetailSkeletonLoader from './molecules/MovieDetailSkeletonLoader';
+import MovieDetailCard from '../molecules/DetailMovieCard';
+import MovieDetailSkeletonLoader from '../molecules/MovieDetailSkeletonLoader';
 
 function deleteMovie(id: number): void {
   MovieAPI().deleteMovieById(id);
 }
 
-export default function MovieDetail({ route }: any) {
+export default function MovieDetailPage({ route }: any) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [movie, setMovie] = useState<MovieType | null>(null);
@@ -36,7 +36,7 @@ export default function MovieDetail({ route }: any) {
         setMovie(fetchedMovie);
         setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
-        console.error('Error fetching movie by ID:', error);
+        Alert.alert("Movie can't be loaded", "Please try again later");
       }
     };
 

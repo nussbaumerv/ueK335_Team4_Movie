@@ -1,19 +1,18 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme, Divider, IconButton, Button, Chip } from 'react-native-paper';
 import CustomButton from '../atoms/CustomButton';
 import AddButton from '../atoms/AddButton';
 import SearchButton from '../atoms/SearchButton';
 import MovieCard from '../molecules/MovieCard';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MovieAPI } from '../../service/Movie';
 import { MovieType } from '../../types/Movie';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SortModal from '../molecules/SortModal';
 import { MovieTypeWithExtras } from '../../types/MovieWithExtras';
-import { move } from 'formik';
 
 export default function MoviePage() {
   const navigation = useNavigation();
@@ -39,7 +38,8 @@ export default function MoviePage() {
     setShowBackToTop(y > 0);
   };
 
-  useEffect(() => {
+  useFocusEffect(
+    React.useCallback(() => {
     const loadMovies = async () => {
       try {
         const movieApi = MovieAPI();
@@ -59,12 +59,13 @@ export default function MoviePage() {
           setFilteredMovies(fetchedMovies);
         }
       } catch (error) {
-        console.error('Error fetching movies', error);
+        Alert.alert("Movies can't be loaded", "Please try again later");
       }
     };
 
-    loadMovies();
-  }, []);
+    loadMovies(); // Call immediately on focus
+  }, []) // Empty dependency array ensures it runs only on focus changes
+);
 
   const loadStoredMovies = async () => {
     try {
@@ -74,7 +75,7 @@ export default function MoviePage() {
       }
       return null;
     } catch (error) {
-      console.error('Error loading stored movies', error);
+      Alert.alert("Favorites can't be loaded", "Please try again later");
       return null;
     }
   };
@@ -388,7 +389,7 @@ export default function MoviePage() {
         </View>
       </View>
       <View style={styles.filterChipContainer}>
-        {activeSorter && <Text style={{ color: theme.colors.onSecondary, marginLeft: 10 }}>Sorting by: {activeSorter}</Text>}
+        {activeSorter && <Text style={{ color: theme.colors.onSurface, marginLeft: 10 }}>Sorting by: {activeSorter}</Text>}
         <View style={styles.filterInnerChipContainer}>
           {selectedGenre && <Chip onClose={clearFilter}>Genre: {selectedGenre}</Chip>}
           {selectedYear && <Chip onClose={clearFilter}>Year: {selectedYear}</Chip>}
@@ -487,14 +488,14 @@ export default function MoviePage() {
               onChangeText={setSearchQuery}
               onSubmitEditing={handleSearch}
             />
-            <Button mode="outlined" onPress={handleSearch} style={styles.closeButton}>
-              Search
+            <Button onPress={handleSearch} style={styles.clearButton}>
+              <Text style={styles.clearButtonText}>Search</Text>
             </Button>
-            <Button mode="outlined" onPress={clearSearch} style={styles.closeButton}>
-              Clear Search
+            <Button onPress={clearSearch} style={styles.clearButton}>
+              <Text style={styles.clearButtonText}>Clear Search</Text>
             </Button>
-            <Button mode="outlined" onPress={closeSearchModal} style={styles.closeButton}>
-              Close
+            <Button onPress={closeSearchModal} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Close</Text>
             </Button>
           </View>
         </View>

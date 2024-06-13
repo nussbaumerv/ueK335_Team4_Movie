@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper'; // Import ActivityIndicator from React Native Paper
 
 const MovieDetailSkeletonLoader = () => {
