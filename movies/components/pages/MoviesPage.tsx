@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme, Divider, IconButton, Button, Chip } from 'react-native-paper';
 import CustomButton from '../atoms/CustomButton';
@@ -13,6 +13,7 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SortModal from '../molecules/SortModal';
 import { MovieTypeWithExtras } from '../../types/MovieWithExtras';
+import { accessibilityProps } from 'react-native-paper/lib/typescript/components/MaterialCommunityIcon';
 
 /**
  * The MoviePage component displays a list of movies and provides filtering, sorting, and search functionality.
@@ -35,6 +36,7 @@ export default function MoviePage() {
   const [activeSorter, setActiveSorter] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   /**
    * Handles the scroll event and sets the showBackToTop state.
@@ -43,39 +45,68 @@ export default function MoviePage() {
   const handleScroll = (event: any) => {
     const { y } = event.nativeEvent.contentOffset;
     setShowBackToTop(y > 0);
+    if (y === 0) {
+      loadMovies();
+       // Reload movies when scrolled to the top
+    }
   };
+
+  const loadMovies = async () => {
+    try {
+      setLoading(true); // Show activity indicator
+  
+      const movieApi = MovieAPI();
+      const fetchedMovies = await movieApi.getMovies();
+      const storedMovies = await loadStoredMovies(); // Load stored movie data
+  
+      let updatedMovies = fetchedMovies;
+  
+      // Merge fetched movies with stored ratings and favorite status if storedMovies exist
+      if (storedMovies) {
+        updatedMovies = fetchedMovies.map(movie => ({
+          ...movie,
+          rating: storedMovies.ratings[movie.id] || 0,
+          isFavorite: storedMovies.favorites.includes(movie.id),
+        }));
+      }
+  
+      // Apply sorting if activeSorter is set
+      if (activeSorter) {
+        switch (activeSorter) {
+          case 'Rating':
+            updatedMovies.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            break;
+          case 'Favorites':
+            updatedMovies.sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0));
+            break;
+          case 'Title':
+            updatedMovies.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+          default:
+            break;
+        }
+      }
+  
+      setMovies(updatedMovies);
+      setFilteredMovies(updatedMovies);
+      setLoading(false); // Hide activity indicator
+    } catch (error) {
+      setLoading(false); // Hide activity indicator on error
+      Alert.alert("Movies can't be loaded", "Please try again later");
+    }
+  };
+  
+  
 
   /**
    * Loads movies from the API and retrieves stored movie data when the component is focused.
    */
   useFocusEffect(
     React.useCallback(() => {
-      const loadMovies = async () => {
-        try {
-          const movieApi = MovieAPI();
-          const fetchedMovies = await movieApi.getMovies();
-          const storedMovies = await loadStoredMovies(); // Load stored movie data
-          if (storedMovies) {
-            // Merge fetched movies with stored ratings and favorite status
-            const mergedMovies = fetchedMovies.map(movie => ({
-              ...movie,
-              rating: storedMovies.ratings[movie.id] || 0,
-              isFavorite: storedMovies.favorites.includes(movie.id),
-            }));
-            setMovies(mergedMovies);
-            setFilteredMovies(mergedMovies);
-          } else {
-            setMovies(fetchedMovies);
-            setFilteredMovies(fetchedMovies);
-          }
-        } catch (error) {
-          Alert.alert("Movies can't be loaded", "Please try again later");
-        }
-      };
-
       loadMovies(); // Call immediately on focus
     }, []) // Empty dependency array ensures it runs only on focus changes
   );
+
 
   /**
    * Loads stored movie data from AsyncStorage.
@@ -248,6 +279,7 @@ export default function MoviePage() {
     });
     setFilteredMovies(sortedMovies);
     setActiveSorter('Favorites');
+
     closeSortModal();
   };
 
@@ -440,12 +472,17 @@ export default function MoviePage() {
         </View>
       </View>
       <ScrollView ref={scrollViewRef} style={styles.movieContainer} onScroll={handleScroll}>
-        {filteredMovies && filteredMovies.map(movie => (
-          <TouchableOpacity key={movie.id} onPress={() => handleMoviePress(movie)}>
-            <MovieCard key={movie.id} movie={movie} />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+  {filteredMovies && filteredMovies.map(movie => (
+    <TouchableOpacity key={movie.id} onPress={() => handleMoviePress(movie)}>
+      <MovieCard key={movie.id} movie={movie} />
+    </TouchableOpacity>
+  ))}
+</ScrollView>
+{loading && (
+      <View style={[StyleSheet.absoluteFill, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    )}
       {showBackToTop && (
         <TouchableOpacity
           style={styles.backToTopButton}
