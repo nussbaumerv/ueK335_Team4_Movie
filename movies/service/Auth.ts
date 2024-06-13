@@ -34,7 +34,9 @@ export const RegisterAPIRequest = (api: AxiosInstance = baseInstance) => ({
       age: age
     });
     AsyncStorage.setItem("accessToken", response.data.accessToken);
-    AsyncStorage.setItem("userId", response.data.id);
+    AsyncStorage.setItem("userId", String(response.data.user.id));
+    console.log("Gotten" + response.data.user.id);
+    console.log("Gotten" + AsyncStorage.getItem("userId"));
     return response.data;
   },
 });
